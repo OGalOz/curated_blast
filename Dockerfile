@@ -10,6 +10,7 @@ MAINTAINER KBase Developer
 
 RUN apt-get update
 
+RUN aptitude update && aptitude safe-upgrade
 
 RUN apt-get install --yes \
     build-essential \
