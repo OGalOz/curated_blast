@@ -21,14 +21,24 @@ RUN apt-get install --yes \
 
 RUN apt-get install -y cpanminus
 
+
+RUN apt-get install --yes \
+    gcc-multilib \
+    expat \ 
+    libexpat-dev
+
+
+
 RUN cpanm LWP::UserAgent \
-    XML::Parser::PerlSAX \
     YAML \
     Getopt::Long \
     FindBin \
     File::Which \
     IO::Handle \
     JSON
+
+RUN cpan XML::Parser::PerlSAX
+
 
 RUN apt-get --yes install libxml-libxml-perl
 
