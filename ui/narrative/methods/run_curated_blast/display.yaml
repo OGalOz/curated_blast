@@ -1,0 +1,43 @@
+#
+# define display information
+#
+name: Method Name Here
+
+tooltip: |
+    Perform some kind of method
+
+screenshots: []
+
+icon: icon.png
+
+#
+# define a set of similar apps that might be useful to the user
+#
+suggestions:
+    apps:
+        related:
+            [app1, app2]
+        next:
+            [app3, app4]
+
+#
+# Configure the display and description of parameters
+#
+parameters :
+    genome_ref :
+        ui-name : |
+            Genome
+        short-hint: |
+            The Genome on which you wish to perform the search (must be a KBase Genome Object).
+    search_query :
+        ui-name : |
+            Search term
+        short-hint : |
+            Examples - perchlorate or 1.2.1.88
+        long-hint  : |
+            Any single word term or E.C. number that relates to a gene
+
+description : |
+    <p>Given a genome and a query, find characterized proteins whose descriptions match the query, and then search the genome for homologs of those proteins. </p>
+
+
