@@ -10,7 +10,7 @@ MAINTAINER KBase Developer
 
 RUN apt-get update
 
-RUN apt-get install aptitude
+RUN apt-get install -y aptitude
 
 RUN aptitude update && aptitude safe-upgrade
 
