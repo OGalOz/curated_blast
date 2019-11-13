@@ -12,7 +12,7 @@ RUN apt-get update
 
 RUN apt-get install -y aptitude
 
-RUN aptitude update && aptitude safe-upgrade
+RUN aptitude update -y && aptitude safe-upgrade -y
 
 RUN apt-get install --yes \
     build-essential \
