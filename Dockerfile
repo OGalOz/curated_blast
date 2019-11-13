@@ -14,7 +14,7 @@ RUN apt-get update
 RUN apt-get install --yes \
     build-essential \
     apt-utils \
-    perl5.24 \
+    perl5.24 
 
 RUN apt-get install -y cpanminus
 
