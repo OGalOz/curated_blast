@@ -13,11 +13,8 @@ RUN apt-get update
 
 RUN apt-get install --yes \
     build-essential \
-    gcc-multilib \
     apt-utils \
     perl5.24 \
-    expat \
-    libexpat-dev
 
 RUN apt-get install -y cpanminus
 
@@ -103,7 +100,7 @@ COPY ./ /kb/module
 RUN mkdir -p /kb/module/work
 RUN chmod -R a+rw /kb/module
 
-RUN mv /stats /litsearch.db /uniq.* /kb/module/lib/PaperBLAST/data/
+RUN ln /stats /litsearch.db /uniq.* /kb/module/lib/PaperBLAST/data/
 
 RUN ls /kb/module/lib/PaperBLAST/data/
 

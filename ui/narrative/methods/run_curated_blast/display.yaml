@@ -38,6 +38,6 @@ parameters :
             Any single word term or E.C. number that relates to a gene
 
 description : |
-    <p>Given a genome and a query, find characterized proteins whose descriptions match the query, and then search the genome for homologs of those proteins. </p>
+    <p>Given a genome and a query, find characterized proteins whose descriptions match the query, and then search the genome for homologs of those proteins. - Uses Morgan Price's Curated Blast - http://papers.genomics.lbl.gov/cgi-bin/genomeSearch.cgi </p>
 
 
