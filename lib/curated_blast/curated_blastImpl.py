@@ -74,6 +74,14 @@ class curated_blast:
         copyfile(genome_protein_filepath, genome_p_location_pb)
         copyfile(genome_nucleotide_filepath, genome_n_location_pb)
 
+        #We create symlinks for the reference data in the PaperBLAST data directory
+        data_dir = "/data"
+        pb_data_dir = "/kb/module/lib/PaperBLAST/data"
+        logging.debug(os.listdir(data_dir))
+        for f in os.listdir(data_dir):
+            if os.path.isfile(os.path.join(data_dir,f)):
+                copyfile(os.path.join(data_dir, f),os.path.join(pb_data_dir,f))
+        logging.debug(os.listdir(pb_data_dir))
         #We start the input string to the program
         search_input = 'gdb=local&gid=ababffffbaba&query=' + search_query
 

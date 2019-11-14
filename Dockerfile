@@ -94,13 +94,13 @@ RUN apt-get install -y wget
 
 
 #Installing Database
-RUN wget http://papers.genomics.lbl.gov/data/uniq.faa
+#RUN wget http://papers.genomics.lbl.gov/data/uniq.faa
 
-RUN wget http://papers.genomics.lbl.gov/data/litsearch.db
+#RUN wget http://papers.genomics.lbl.gov/data/litsearch.db
 
-RUN wget http://papers.genomics.lbl.gov/data/stats
+#RUN wget http://papers.genomics.lbl.gov/data/stats
 
-RUN wget ftp://ftp.ncbi.nlm.nih.gov/blast/executables/legacy.NOTSUPPORTED/2.2.18/blast-2.2.18-ia32-linux.tar.gz && tar zxvf blast-2.2.18-ia32-linux.tar.gz && blast-2.2.18/bin/formatdb -p T -o T -i uniq.faa && ls
+#RUN wget ftp://ftp.ncbi.nlm.nih.gov/blast/executables/legacy.NOTSUPPORTED/2.2.18/blast-2.2.18-ia32-linux.tar.gz && tar zxvf blast-2.2.18-ia32-linux.tar.gz && blast-2.2.18/bin/formatdb -p T -o T -i uniq.faa && ls
 
 #RUN apt-get install -y python3-pip python3-dev
 
@@ -113,7 +113,7 @@ COPY ./ /kb/module
 RUN mkdir -p /kb/module/work
 RUN chmod -R a+rw /kb/module
 
-RUN ln /stats /litsearch.db /uniq.* /kb/module/lib/PaperBLAST/data/
+#RUN ln /stats /litsearch.db /uniq.* /kb/module/lib/PaperBLAST/data/
 
 RUN ls /kb/module/lib/PaperBLAST/data/
 

@@ -18,19 +18,8 @@ elif [ "${1}" = "test" ] ; then
 elif [ "${1}" = "async" ] ; then
   sh ./scripts/run_async.sh
 elif [ "${1}" = "init" ] ; then
-  echo "Initialize module"
-  cd /data
-  curl http://papers.genomics.lbl.gov/data/uniq.faa
-  curl http://papers.genomics.lbl.gov/data/litsearch.db
-  curl http://papers.genomics.lbl.gov/data/stats
-  ../lib/PaperBLAST/bin/blast/formatdb -p T -o T -i uniq.faa
-  ln -s * ../lib/PaperBLAST/data/
-  if [ -d uniq.faa ] ; then
-    touch __READY__
-  else
-    echo "init failed"
-  fi
-  cd ..
+  echo "Initializing reference data: ./scripts/load_reference_data.sh"
+  sh ./scripts/load_reference_data.sh
 elif [ "${1}" = "bash" ] ; then
   bash
 elif [ "${1}" = "report" ] ; then
