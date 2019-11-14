@@ -113,13 +113,8 @@ COPY ./ /kb/module
 RUN mkdir -p /kb/module/work
 RUN chmod -R a+rw /kb/module
 
-#RUN ln /stats /litsearch.db /uniq.* /kb/module/lib/PaperBLAST/data/
-
-RUN ls /kb/module/lib/PaperBLAST/data/
 
 WORKDIR /kb/module
-
-#RUN mv /root/uniq.faa /root/litsearch.db /root/stats kb/module/data
 
 RUN make all
 
