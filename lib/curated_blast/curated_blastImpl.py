@@ -113,7 +113,7 @@ class curated_blast:
         if not os.path.exists(os.path.join(pb_home, "tmp")):
             os.mkdir(os.path.join(pb_home, "tmp"))
         if not os.path.exists(os.path.join(pb_home,"fbrowse_data")):
-            os.mkdir(os.path.join(pb_home, "fbrwose_data"))
+            os.mkdir(os.path.join(pb_home, "fbrowse_data"))
         if not os.path.exists(os.path.join(pb_home, "tmp/ababffffbaba")):
             os.mkdir(os.path.join(pb_home, "tmp/ababffffbaba"))
         genome_dir_path = os.path.join(pb_home, "tmp/ababffffbaba")
