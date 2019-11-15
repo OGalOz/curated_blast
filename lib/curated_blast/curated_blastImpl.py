@@ -34,6 +34,7 @@ class curated_blast:
 
         if "genome_ref" in params:
             genome_ref = params['genome_ref']
+            logging.debug("Genome Ref: " + genome_ref)
         else:
             logging.info('the genome reference number is not in the params.')
             raise Exception("no genome ref to download")

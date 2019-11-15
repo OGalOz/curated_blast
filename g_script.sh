@@ -2,5 +2,5 @@
 
 echo $1
 git add .
-git commit -m "docker replace $1"
+git commit -m "debugging UI $1"
 git push
