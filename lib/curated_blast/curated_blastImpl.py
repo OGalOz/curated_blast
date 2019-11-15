@@ -85,45 +85,68 @@ class curated_blast:
         ws = Workspace(self.ws_url, token=token)
         #obj_info = ws.get_object_info3({'objects': [{'ref': genome_ref}]})
 
+        #CODE
         gf_tool = GenomeFileUtil(self.callback_url)
         genome_protein_meta = gf_tool.genome_proteins_to_fasta({'genome_ref': genome_ref})
+
+        #DEBUG
+        logging.debug("GENOME PROTEIN META")
+        logging.debug(genome_protein_meta)
+
+        #CODE
         genome_protein_filepath = genome_protein_meta['file_path']
         genome_nucleotide_meta = gf_tool.genome_features_to_fasta({'genome_ref': genome_ref})
+
+        #DEBUG
+        logging.debug("GENOME NUCLEOTIDE META")
+        logging.debug(genome_nucleotide_meta)
+
+        #CODE
         genome_nucleotide_filepath = genome_nucleotide_meta['file_path']
-        #Getting just the file's name, not full path
+
+        #HACK CODE
         gp_file_name = genome_protein_filepath.split('/')[-1]
         gn_file_name = genome_nucleotide_filepath.split('/')[-1]
 
-        #Making a directory for the genome fasta file
-        logging.debug(os.listdir('/kb/module'))
-        logging.debug(os.listdir('/kb/module/lib'))
-        logging.debug(os.listdir('/kb/module/lib/curated_blast'))
-        logging.debug(os.listdir('/kb/module/lib/curated_blast/PaperBLAST'))
+        #CODE - creating directories for curated blast
         pb_home = "/kb/module/lib/curated_blast/PaperBLAST"
-        os.mkdir('/kb/module/lib/curated_blast/PaperBLAST/tmp')
-        os.mkdir('/kb/module/lib/curated_blast/PaperBLAST/fbrowse_data')
-        genome_dir_path = os.path.join("/kb/module/lib/curated_blast/PaperBLAST/tmp/ababffffbaba")
-        os.mkdir(genome_dir_path)
-        logging.debug("CGI Dir: ")
-        logging.debug(os.listdir(os.path.join(pb_home, "cgi")))
+        if not os.path.exists(os.path.join(pb_home, "tmp")):
+            os.mkdir(os.path.join(pb_home, "tmp"))
+        if not os.path.exists(os.path.join(pb_home,"fbrowse_data")):
+            os.mkdir(os.path.join(pb_home, "fbrwose_data"))
+        if not os.path.exists(os.path.join(pb_home, "tmp/ababffffbaba")):
+            os.mkdir(os.path.join(pb_home, "tmp/ababffffbaba"))
+        genome_dir_path = os.path.join(pb_home, "tmp/ababffffbaba")
+
+        #DEBUG
         logging.debug("Bin Dir: ")
         logging.debug(os.listdir(os.path.join(pb_home, "bin")))
         
-
+        #CODE
         #We copy the genome files to their location within PaperBLAST
         genome_p_location_pb = os.path.join(genome_dir_path,"faa")
         genome_n_location_pb = os.path.join(genome_dir_path, "fna")
         copyfile(genome_protein_filepath, genome_p_location_pb)
         copyfile(genome_nucleotide_filepath, genome_n_location_pb)
 
+        #CODE
         #We copy the reference data in the PaperBLAST data directory
         data_dir = "/data"
         pb_data_dir = "/kb/module/lib/curated_blast/PaperBLAST/data"
+
+        #DEBUG
         logging.debug(os.listdir(data_dir))
+
+        #CODE
+        #copying data from data directory to PaperBLAST data directory
         for f in os.listdir(data_dir):
             if os.path.isfile(os.path.join(data_dir,f)):
                 copyfile(os.path.join(data_dir, f),os.path.join(pb_data_dir,f))
+
+        #DEBUG
         logging.debug(os.listdir(pb_data_dir))
+
+        #CODE
         #We start the input string to the program
         search_input = 'gdb=local&gid=ababffffbaba&query=' + search_query
 
@@ -139,16 +162,29 @@ class curated_blast:
         f = open("cb_out.html", "r")
         file_str = f.read()
 
+        #DEBUG
         logging.debug(len(file_str))
+
+        #CODE
         #Updated base link:
         base_html = '<base href="http://papers.genomics.lbl.gov/cgi-bin/" target="_blank">'
         
         #finding and inserting the base link:
         file_list = file_str.split('\n')
+
+        #DEBUG
         logging.info("Number of lines in output file: " + str(len(file_list)))
+
+        #CODE
+        #inserting the base html line
         new_file_list = file_list[:8] + [base_html] + file_list[8:]
+        
+        #finding lines to remove
         bad_lines = []
+
+        #finding a line to replace
         replace_line = 0
+
         #Finding and removing searching in line
         for i in range(len(new_file_list)):
             if '(ababffffbaba)' in new_file_list[i]:
@@ -173,23 +209,23 @@ class curated_blast:
             new_file_list = new_file_list[:ind] + new_file_list[ind+1:]
 
 
-        #DEBUGGING:
+        
         new_file_str = '\n'.join(new_file_list)
         
-        #CODE
+        #writing output file to a place where KBase SDK can get to it
+        os.chdir('/kb/module')
         html_path = os.path.join(self.shared_folder,"cb_out.html")
         g = open(html_path,"w")
         g.write(new_file_str)
         g.close()
 
-        #DEBUGGING
+        #DEBUG
         h = open(html_path, "r")
         logging.debug(h.read())
 
         #CODE
-        os.chdir('/kb/module')
-
-        html_dict = [{"path": html_path, "name":"Results"}]
+        #preparing file for output
+        html_dict = [{"path": html_path, "name":"Results", "label": "curated-blast-results"}]
 
         report_info = report_client.create_extended_report({
 

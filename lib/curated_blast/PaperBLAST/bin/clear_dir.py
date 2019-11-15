@@ -13,7 +13,8 @@ def main():
         if "mmseqstmp" in files_list:
             files_list.remove('mmseqstmp')
         for filename in files_list:
-            os.unlink(os.path.join(dir_to_clear, filename))
+            if os.path.isfile(filename):
+                os.unlink(os.path.join(dir_to_clear, filename))
 
 
 main()
