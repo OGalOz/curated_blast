@@ -171,7 +171,13 @@ class curated_blast:
             ind = bad_lines[i]
             new_file_list = new_file_list[:ind] + new_file_list[ind+1:]
 
-        new_file_str = '\n'.join(new_file_list) 
+
+        #DEBUGGING:
+        for l in new_file_list:
+            logging.debug(l)
+
+        new_file_str = '\n'.join(new_file_list)
+        
         html_path = os.path.join(self.shared_folder,"cb_out.html")
         g = open(html_path,"w")
         g.write(new_file_str)
