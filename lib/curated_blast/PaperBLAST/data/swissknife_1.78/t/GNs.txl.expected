@@ -1,0 +1,25 @@
+GN   (A{EA1} OR B{EI2}) And C.
+GN   (A{EA2} OR B{EI3}) And C.
+GN   (A{EA2} or B{EI3}) and C.
+GN   A{EA1} or B{EA2}.
+GN   Timeo danaos, et dona ferentes.
+GN   A{EA2} and C.
+GN   C.
+(Nothing)
+(Nothing)
+GN   Wallace OR Gromit.
+GN   (Wallace OR Gromit) And
+GN   (So long vict OR ious, happy 'n gl OR ious, long to reign over us).
+GN   Foobar And (Wallace OR Gromit) And
+GN   (So long vict OR ious, happy 'n gl OR ious, long to reign over us).
+GN   Name=Foobar;
+GN   and
+GN   Name=Wallace; Synonyms=Gromit;
+GN   and
+GN   Name=So long vict;
+GN   Synonyms=ious, happy 'n gl, ious, long to reign over us;
+ GN   Name=Foobar;
+ GN   and
+ GN   Name=Wallace; Synonyms=Gromit;
+ GN   and
+ GN   Name=So long vict; Synonyms=happy 'n gl, ious, long to reign over us;

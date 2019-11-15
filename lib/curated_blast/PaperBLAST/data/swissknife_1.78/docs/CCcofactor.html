@@ -1,0 +1,112 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>SWISS::CCcofactor</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:operations@isb-sib.ch" />
+</head>
+
+<body style="background-color: white">
+
+
+<!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
+
+<ul>
+
+	<li><a href="#name">Name</a></li>
+	<li><a href="#description">Description</a></li>
+	<li><a href="#inherits_from">Inherits from</a></li>
+	<li><a href="#attributes">Attributes</a></li>
+	<ul>
+
+		<li><a href="#standard_methods">Standard methods</a></li>
+	</ul>
+
+</ul>
+
+<hr name="index" />
+</div>
+<!-- INDEX END -->
+
+<p>
+</p>
+<h1><a name="name">Name</a></h1>
+<p>SWISS::CCcofactor</p>
+<p>
+</p>
+<hr />
+<h1><a name="description">Description</a></h1>
+<p><strong>SWISS::CCcofactor</strong> represents a comment on the topic 'COFACTOR'
+within a Swiss-Prot or TrEMBL entry as specified in the user manual
+<a href="http://www.expasy.org/sprot/userman.html">http://www.expasy.org/sprot/userman.html</a> .  Comments on other topics are stored
+in other types of objects, such as SWISS::CC (see SWISS::CCs for more information).</p>
+<p>Collectively, comments of all types are stored within a SWISS::CCs container
+object.</p>
+<p>
+</p>
+<hr />
+<h1><a name="inherits_from">Inherits from</a></h1>
+<p>SWISS::ListBase.pm</p>
+<p>
+</p>
+<hr />
+<h1><a name="attributes">Attributes</a></h1>
+<dl>
+<dt><strong><a name="topic" class="item">topic</a></strong></dt>
+
+<dd>
+<p>The topic of this comment ('COFACTOR').</p>
+</dd>
+<dt><strong><a name="comment" class="item">comment</a></strong></dt>
+
+<dd>
+<p>The &quot;text&quot; version of this comment (without evidences and new lines).</p>
+</dd>
+<dt><strong><a name="note" class="item">note</a></strong></dt>
+
+<dd>
+<p>The note and evidence (Note= in new format or full description in old format)
+reference to an array of [ $note, $note_ev ] (strings)</p>
+</dd>
+<dt><strong><a name="elements" class="item">elements</a></strong></dt>
+
+<dd>
+<p>An array of [name_str, evidence_tags_str], if any.</p>
+</dd>
+</dl>
+<dl>
+<dt><strong><a name="structured_names" class="item">structured_names</a></strong></dt>
+
+<dd>
+<p>(only for new structured CC COFACTOR)
+The names as array of 'name' txt, 'chebi' id, 'ev' string (hash) structures
+e.g. [ { 'name'-&gt;'FAD', 'chebi'-&gt;'CHEBI:57692', 'ev'-&gt;'ECO:0000250' } ]</p>
+</dd>
+<dt><strong>structured_names( $new_values )</strong></dt>
+
+<dd>
+<p>(only for new structured CC COFACTOR)
+Set names with array of 'name' txt, 'chebi' id, 'ev' string (hash) structures like returned by get-er version</p>
+</dd>
+</dl>
+<p>
+</p>
+<h2><a name="standard_methods">Standard methods</a></h2>
+<dl>
+<dt><strong><a name="new" class="item">new</a></strong></dt>
+
+<dt><strong><a name="fromtext" class="item">fromText</a></strong></dt>
+
+<dt><strong><a name="tostring" class="item">toString</a></strong></dt>
+
+<dd>
+<p>Returns a string representation of this comment.</p>
+</dd>
+</dl>
+
+</body>
+
+</html>

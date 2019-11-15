@@ -97,9 +97,9 @@ class curated_blast:
         #Making a directory for the genome fasta file
         logging.debug(os.listdir('/kb/module'))
         logging.debug(os.listdir('/kb/module/lib'))
-        logging.debug(os.listdir('/kb/module/lib/PaperBLAST'))
-        logging.debug(os.listdir('/kb/module/lib/PaperBLAST/tmp'))
-        genome_dir_path = os.path.join('/kb/module',"lib/PaperBLAST/tmp/ababffffbaba")
+        logging.debug(os.listdir('/kb/module/lib/curated_blast'))
+        logging.debug(os.listdir('/kb/module/lib/curated_blast/PaperBLAST'))
+        genome_dir_path = os.path.join("/kb/module/lib/curated_blast/PaperBLAST/tmp/ababffffbaba")
         if not os.path.exists(genome_dir_path):
             os.mkdir(genome_dir_path)
 
@@ -111,7 +111,7 @@ class curated_blast:
 
         #We copy the reference data in the PaperBLAST data directory
         data_dir = "/data"
-        pb_data_dir = "/kb/module/lib/PaperBLAST/data"
+        pb_data_dir = "/kb/module/lib/curated_blast/PaperBLAST/data"
         logging.debug(os.listdir(data_dir))
         for f in os.listdir(data_dir):
             if os.path.isfile(os.path.join(data_dir,f)):
@@ -121,7 +121,7 @@ class curated_blast:
         search_input = 'gdb=local&gid=ababffffbaba&query=' + search_query
 
         #We run the program internally from within PaperBLAST's cgi directory
-        os.chdir('/kb/module/lib/PaperBLAST/cgi')
+        os.chdir('/kb/module/lib/curated_blast/PaperBLAST/cgi')
         logging.info(os.access('dbg_genomeSearch.cgi', os.X_OK))
         cmnds = ['perl','dbg_genomeSearch.cgi', search_input]
         with open('cb_out.html', "w") as outfile:

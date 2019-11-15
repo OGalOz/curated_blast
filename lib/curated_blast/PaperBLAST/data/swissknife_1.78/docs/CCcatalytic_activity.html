@@ -1,0 +1,146 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>SWISS::CCcatalytic_activity</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:operations@isb-sib.ch" />
+</head>
+
+<body style="background-color: white">
+
+
+<!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
+
+<ul>
+
+	<li><a href="#name">Name</a></li>
+	<li><a href="#description">Description</a></li>
+	<li><a href="#inherits_from">Inherits from</a></li>
+	<li><a href="#attributes">Attributes</a></li>
+	<ul>
+
+		<li><a href="#standard_methods">Standard methods</a></li>
+	</ul>
+
+</ul>
+
+<hr name="index" />
+</div>
+<!-- INDEX END -->
+
+<p>
+</p>
+<h1><a name="name">Name</a></h1>
+<p>SWISS::CCcatalytic_activity</p>
+<p>
+</p>
+<hr />
+<h1><a name="description">Description</a></h1>
+<p><strong>SWISS::CCcofactor</strong> represents a comment on the topic 'CATALYTIC ACTIVITY'
+within a Swiss-Prot or TrEMBL entry as specified in the user manual
+<a href="http://www.expasy.org/sprot/userman.html">http://www.expasy.org/sprot/userman.html</a> .  Comments on other topics are stored
+in other types of objects, such as SWISS::CC (see SWISS::CCs for more information).</p>
+<p>Collectively, comments of all types are stored within a SWISS::CCs container
+object.</p>
+<p>
+</p>
+<hr />
+<h1><a name="inherits_from">Inherits from</a></h1>
+<p>SWISS::BaseClass</p>
+<p>
+</p>
+<hr />
+<h1><a name="attributes">Attributes</a></h1>
+<dl>
+<dt><strong><a name="topic" class="item">topic</a></strong></dt>
+
+<dd>
+<p>The topic of this comment ('CATALYTIC ACTIVITY').</p>
+</dd>
+<dt><strong><a name="comment" class="item">comment</a></strong></dt>
+
+<dd>
+<p>The &quot;text&quot; version of this comment (without evidences and new lines).</p>
+</dd>
+</dl>
+<dl>
+<dt><strong><a name="activity_rhea" class="item">activity_rhea</a></strong></dt>
+
+<dd>
+<p>The rhea id (e.g. RHEA:18037) of the reaction (only for new structured CC CATALYTIC ACTIVITY)</p>
+</dd>
+<dt><strong>activity_rhea( $new_rhea_id, $new_optional_reaction_ev )</strong></dt>
+
+<dd>
+<p>Set rhea activity to $new_rhea_id (and reaction ev to $new_optional_reaction_ev if provided)
+(only for new structured CC CATALYTIC ACTIVITY)</p>
+</dd>
+<dt><strong><a name="activity_reaction" class="item">activity_reaction</a></strong></dt>
+
+<dd>
+<p>The reaction txt (e.g. agmatine + H2O = N-carbamoylputrescine + NH4(+))</p>
+</dd>
+<dt><strong>activity_reaction( $new_reaction_txt )</strong></dt>
+
+<dd>
+<p>Set reaction txt to $new_reaction_txt
+(on old unstructured format: extra $ev could be added)</p>
+</dd>
+<dt><strong><a name="activity_ec" class="item">activity_ec</a></strong></dt>
+
+<dd>
+<p>The reaction EC (e.g. 3.5.3.12)</p>
+</dd>
+<dt><strong>activity_ec( $new_reaction_ec, , $new_optional_reaction_ev )</strong></dt>
+
+<dd>
+<p>Set reaction EC to $new_reaction_ec (and reaction ev to $new_optional_reaction_ev if provided)
+(only for new structured CC CATALYTIC ACTIVITY)</p>
+</dd>
+<dt><strong><a name="activity_participant" class="item">activity_participant</a></strong></dt>
+
+<dd>
+<p>The reaction participants as a String Array (e.g. [ &quot;ChEBI:CHEBI:15377&quot;, &quot;ChEBI:CHEBI:28938&quot;, &quot;ChEBI:CHEBI:58145&quot;, &quot;ChEBI:CHEBI:58318&quot; ])
+(participant are shown as dbtype:id e.g. in &quot;ChEBI:CHEBI:15377&quot; CheBI is db type, CHEBI:15377 is (CheBi) id)
+(only for new structured CC CATALYTIC ACTIVITY)</p>
+</dd>
+<dt><strong>activity_participant( $new_participant_array )</strong></dt>
+
+<dd>
+<p>Set reaction participants to $new_participant_array (array of strings)
+(only for new structured CC CATALYTIC ACTIVITY)</p>
+</dd>
+<dt><strong><a name="directions" class="item">directions</a></strong></dt>
+
+<dd>
+<p>The directions: Array of direction structures as hash e.g. [ { 'txt' =&gt; 'left-to-right', 'rhea' =&gt; 'RHEA:16846', 'ev' =&gt; '{ECO:0000269|PubMed:29420286}' } ]
+p.s. in well formed UniProtKB data 'txt' will be 'right-to-left' or 'left-to-right' (in that order); there should be no more than 2 directions (minimum: 0)</p>
+</dd>
+<dt><strong><a name="direction" class="item">direction( $new_directions )</a></strong></dt>
+
+<dd>
+<p>Set directions Array to $new_directions ...
+(only for new structured CC CATALYTIC ACTIVITY)</p>
+</dd>
+</dl>
+<p>
+</p>
+<h2><a name="standard_methods">Standard methods</a></h2>
+<dl>
+<dt><strong><a name="new" class="item">new</a></strong></dt>
+
+<dt><strong><a name="fromtext" class="item">fromText</a></strong></dt>
+
+<dt><strong><a name="tostring" class="item">toString</a></strong></dt>
+
+<dd>
+<p>Returns a string representation of this comment.</p>
+</dd>
+</dl>
+
+</body>
+
+</html>

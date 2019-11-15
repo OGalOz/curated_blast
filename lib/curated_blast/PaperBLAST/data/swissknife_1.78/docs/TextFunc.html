@@ -1,0 +1,130 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>SWISS::TextFunc</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:operations@isb-sib.ch" />
+</head>
+
+<body style="background-color: white">
+
+
+<!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+</ul>
+
+<hr name="index" />
+</div>
+<!-- INDEX END -->
+
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>SWISS::TextFunc</p>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>This module is designed to be a repository of functions that are
+repeatedly used during parsing and formatting of SWISS-PROT/TREMBL lines.
+If more than two line types need to do aproximately the same thing
+then it is probably in here.</p>
+<p>All functions expect to be called as package-&gt;function(param list)</p>
+<dl>
+<dt><strong><a name="listfromtext" class="item">listFromText</a></strong></dt>
+
+<dd>
+<p>Takes a piece of text, a seperator regex and a seperator that may appear at the end.
+Returns an array of items that were seperated in the text by that seperator.  Takes care of
+null items (looses them for you).</p>
+</dd>
+<dt><strong><a name="textfromlist" class="item">textFromList</a></strong></dt>
+
+<dd>
+<p>Takes an array of items, a separator, a terminating string, and a line width.
+Returns an array of strings, each ending with the separator or the terminator with
+a width less than or equal to the width specified.</p>
+<p>Seems to do the wrong thing for references - not sure why.  
+Don't use it for that.</p>
+</dd>
+<dt><strong><a name="wraptext" class="item">wrapText</a></strong></dt>
+
+<dd>
+<p>Takes a string and a length.  Returns an array of strings which are shorter or equal
+in length to length, spliting the string on white space.</p>
+</dd>
+<dt><strong><a name="wrapon" class="item">wrapOn ($firstLinePrefix, $linePrefix, $colums, $text[, @separators])</a></strong></dt>
+
+<dd>
+<p>Wraps $text into lines with at most $colums colums. Prepends the
+prefixes to the lines. @separators is a list of expressions on which
+to wrap. The expression itself is part of the upper line.</p>
+<p>If no @separators are provided, the $text is wrapped at whitespace
+except in EC/TC numbers or at dashes that separate words.</p>
+<p>First tries to wrap on the first item of @separators, then the next
+etc.  If no wrap on any element of @separators or whitespaces is
+possible, wraps into lines of exactly length $colums.</p>
+<p>A special case is that the first item of @separators may be a reference
+to an array. This is used internally for wrapping FT VARIANT-like lines.</p>
+<p>Example:</p>
+<pre>
+ wrapOn('DE ', 'DE ', 40, 
+        '14-3-3 PROTEIN BETA/ALPHA (PROTEIN KINASE C INHIBITOR PROTEIN-1)', 
+        '\s+') 
+ returns ['14-3-3 PROTEIN BETA/ALPHA (PROTEIN ', 
+          'KINASE C INHIBITOR PROTEIN-1)']
+ wrapOn('DE ', 'DE ', 40, 
+        '14-3-3 PROTEIN BETA/ALPHA (PROTEIN KINASE C INHIBITOR PROTEIN-1)', 
+        ' (?=\()', '\s+')
+ returns ['14-3-3 PROTEIN BETA/ALPHA ', 
+          '(PROTEIN KINASE C INHIBITOR PROTEIN-1)']</pre>
+</dd>
+<dt><strong><a name="cleanline" class="item">cleanLine</a></strong></dt>
+
+<dd>
+<p>Remove the leading line Identifier and three blanks and trailing spaces from an SP line.</p>
+</dd>
+<dt><strong><a name="joinwith" class="item">joinWith ($text, $with, $noAddAfter, @list)</a></strong></dt>
+
+<dd>
+<p>Concatenates $text and @list into one string. Adds $with between the 
+original elements, unless the postfix of the current string is $noAddAfter. 
+This is used to avoid inserting blanks after hyphens during concatenation. 
+So unpleasant strings like 'CALMODULIN- DEPENDENT' are avoided. Unfortunately 
+a correct reassembly of strings like 'CARBON-DIOXIDE' is not done.</p>
+</dd>
+<dt><strong><a name="insertlinegroup" class="item">insertLineGroup ($textRef, $text, $pattern)</a></strong></dt>
+
+<dd>
+<p>Inserts text block $text into the text referred to by $textRef. $text will replace the text block in $textRef matched by $pattern.</p>
+</dd>
+<dt><strong><a name="uniquelist" class="item">uniqueList (@list)</a></strong></dt>
+
+<dd>
+<p>Returns a list in which all duplicates from @list have been removed.</p>
+</dd>
+<dt><strong><a name="currentspdate" class="item">currentSpDate</a></strong></dt>
+
+<dd>
+<p>returns the current date in SWISS-PROT format</p>
+</dd>
+<dt><strong><a name="tomixedcase" class="item">toMixedCase($text, @regexps)</a></strong></dt>
+
+<dd>
+<p>Convert a text to mixed case, according to one or more regular expressions.
+In scalar context, returns the new text; in array context, also returns
+the regexp with which the change was performed, or undef on failure.
+See corresponding item in SWISS::GN for more details.</p>
+</dd>
+</dl>
+
+</body>
+
+</html>

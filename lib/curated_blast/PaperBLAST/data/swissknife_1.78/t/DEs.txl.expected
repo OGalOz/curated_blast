@@ -1,0 +1,108 @@
+URIDINE 5'-MONOPHOSPHATE SYNTHASE (UMP SYNTHASE) (RUDIMENTARY-LIKE-PROTEIN) [Includes: OROTATE PHOSPHORIBOSYLTRANSFERASE (EC 2.4.2.10) (OPRTASE); OROTIDINE 5'-PHOSPHATE DECARBOXYLASE (EC 4.1.1.23) (OMPDECASE)] (Fragments)
+list : "URIDINE 5'-MONOPHOSPHATE SYNTHASE", "UMP SYNTHASE", "RUDIMENTARY-LIKE-PROTEIN"
+hasFragment : Fragments
+childType : 
+>
+list : "OROTATE PHOSPHORIBOSYLTRANSFERASE", "EC 2.4.2.10", "OPRTASE"
+hasFragment : 
+childType : Includes
+list : "OROTIDINE 5'-PHOSPHATE DECARBOXYLASE", "EC 4.1.1.23", "OMPDECASE"
+hasFragment : 
+childType : Includes
+//
+ID   PYR5_DROME     STANDARD;      PRT;   493 AA.
+AC   Q01637; Q24221;
+DT   01-JUL-1993, integrated into UniProtKB/Swiss-Prot.
+DT   01-JUL-1993, sequence version 1.
+DT   30-MAY-2000, entry version 1.
+DE   URIDINE 5'-MONOPHOSPHATE SYNTHASE (UMP SYNTHASE) (RUDIMENTARY-LIKE-
+DE   PROTEIN) [INCLUDES: OROTATE PHOSPHORIBOSYLTRANSFERASE (EC 2.4.2.10)
+DE   (OPRTASE); OROTIDINE 5'-PHOSPHATE DECARBOXYLASE (EC 4.1.1.23)
+DE   (OMPDECASE)] (Fragments).
+GN   R-L.
+OS   Drosophila melanogaster (Fruit fly).
+OC   Eukaryota; Metazoa; Arthropoda; Tracheata; Hexapoda; Insecta;
+OC   Pterygota; Neoptera; Endopterygota; Diptera; Brachycera; Muscomorpha;
+OC   Ephydroidea; Drosophilidae; Drosophila.
+OX   NCBI_TaxID=7227;
+RN   [1]
+RP   SEQUENCE FROM N.A.
+RA   Eisenberg M.T., Kirkpatrick R., Rawls J.;
+RL   Submitted (XXX-1992) to the EMBL/GenBank/DDBJ databases.
+SQ   SEQUENCE   493 AA;  53327 MW;  56479CDAB1F6A308 CRC64;
+     MVAQNSDKMR ALALKLFEIN AFKFGDFKMK VGINSPVYFD LRVIVSLGLP QQTVSDLLVE
+     HIKDKQLSAK HVCGVPYTAL PRATIVSVQQ GTPMLVRRKE AKAYGTKKLV EGIFNAGDTC
+     LIVEDVVTSG SSILDTVRDL QGEGIVVTDA VVVVDREQGG VANIAKHGVR MHSLFTLSFL
+     LNTLHEAGRI EKSTVEAVAK YIAAVQINSD GTFVGGDKVT FPAANDLQRT KLTYESRANL
+     AKSAVAKRLF NLIASKQTNL CLAADLTHAD EILDVADKCG PYICLLKTHV DIVEDFSDKF
+     IADLQALAQR HNFLLMEDRK FADIGNTVSL QYGKGIYKIS SWADLVTAHT LPGRSILQGL
+     KAGLGEGGAG KERGVFLLAE MSASGNLIDA KYKENSNKIA TEGADVDFVA GVVCQSSDAF
+     AFPGLLQLTP GVKIDEGVDQ LGQQYQSPEH VVKERGADIG VVGRGILKAS SPKQAAQTYR
+     DRLWAAYQDR VAK
+//
+ID   PYR5_DROME     STANDARD;      PRT;   493 AA.
+AC   Q01637; Q24221;
+DT   01-JUL-1993, integrated into UniProtKB/Swiss-Prot.
+DT   01-JUL-1993, sequence version 1.
+DT   30-MAY-2000, entry version 1.
+DE   Some strange protein (Fragment) (Version 2).
+GN   R-L.
+OS   Drosophila melanogaster (Fruit fly).
+OC   Eukaryota; Metazoa; Arthropoda; Tracheata; Hexapoda; Insecta;
+OC   Pterygota; Neoptera; Endopterygota; Diptera; Brachycera; Muscomorpha;
+OC   Ephydroidea; Drosophilidae; Drosophila.
+OX   NCBI_TaxID=7227;
+RN   [1]
+RP   SEQUENCE FROM N.A.
+RA   Eisenberg M.T., Kirkpatrick R., Rawls J.;
+RL   Submitted (XXX-1992) to the EMBL/GenBank/DDBJ databases.
+SQ   SEQUENCE   493 AA;  53327 MW;  56479CDAB1F6A308 CRC64;
+     MVAQNSDKMR ALALKLFEIN AFKFGDFKMK VGINSPVYFD LRVIVSLGLP QQTVSDLLVE
+     HIKDKQLSAK HVCGVPYTAL PRATIVSVQQ GTPMLVRRKE AKAYGTKKLV EGIFNAGDTC
+     LIVEDVVTSG SSILDTVRDL QGEGIVVTDA VVVVDREQGG VANIAKHGVR MHSLFTLSFL
+     LNTLHEAGRI EKSTVEAVAK YIAAVQINSD GTFVGGDKVT FPAANDLQRT KLTYESRANL
+     AKSAVAKRLF NLIASKQTNL CLAADLTHAD EILDVADKCG PYICLLKTHV DIVEDFSDKF
+     IADLQALAQR HNFLLMEDRK FADIGNTVSL QYGKGIYKIS SWADLVTAHT LPGRSILQGL
+     KAGLGEGGAG KERGVFLLAE MSASGNLIDA KYKENSNKIA TEGADVDFVA GVVCQSSDAF
+     AFPGLLQLTP GVKIDEGVDQ LGQQYQSPEH VVKERGADIG VVGRGILKAS SPKQAAQTYR
+     DRLWAAYQDR VAK
+//
+(2'-5')OLIGOADENYLATE SYNTHETASE 1A (EC 2.7.7.-) ((2-5')OLIGO(A) SYNTHETASE 1A) (2-5A SYNTHETASE 1A)
+list : "(2'-5')OLIGOADENYLATE SYNTHETASE 1A", "EC 2.7.7.-", "(2-5')OLIGO(A) SYNTHETASE 1A", "2-5A SYNTHETASE 1A"
+hasFragment : 
+childType : 
+>
+//
+Arginine biosynthesis bifunctional protein argJ [Includes: Glutamate- and N-acetyltransferase (EC 2.3.1.35) (Ornithine acetyltransferase) (Ornithine transacetylase) (OATASE); Amino-acid acetyltransferase (EC 2.3.1.1) (N-acetylglutamate synthase) (AGS)] [Contains: Arginine biosynthesis bifunctional protein alpha chain; Arginine biosynthesis bifunctional protein beta chain]
+list : "Arginine biosynthesis bifunctional protein argJ"
+hasFragment : 
+childType : 
+>
+list : "Glutamate- and N-acetyltransferase", "EC 2.3.1.35", "Ornithine acetyltransferase", "Ornithine transacetylase", "OATASE"
+hasFragment : 
+childType : Includes
+list : "Amino-acid acetyltransferase", "EC 2.3.1.1", "N-acetylglutamate synthase", "AGS"
+hasFragment : 
+childType : Includes
+list : "Arginine biosynthesis bifunctional protein alpha chain"
+hasFragment : 
+childType : Contains
+list : "Arginine biosynthesis bifunctional protein beta chain"
+hasFragment : 
+childType : Contains
+//
+Angiotensinogen precursor [Contains: Angiotensin I (Ang I); Angiotensin II (Ang II); Angiotensin III (Ang III) (Des-Asp[1]-angiotensin II)]
+list : "Angiotensinogen precursor"
+hasFragment : 
+childType : 
+>
+list : "Angiotensin I", "Ang I"
+hasFragment : 
+childType : Contains
+list : "Angiotensin II", "Ang II"
+hasFragment : 
+childType : Contains
+list : "Angiotensin III", "Ang III", "Des-Asp[1]-angiotensin II"
+hasFragment : 
+childType : Contains
+//
