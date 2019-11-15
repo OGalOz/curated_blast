@@ -99,15 +99,17 @@ class curated_blast:
         logging.debug(os.listdir('/kb/module/lib'))
         logging.debug(os.listdir('/kb/module/lib/curated_blast'))
         logging.debug(os.listdir('/kb/module/lib/curated_blast/PaperBLAST'))
+        pb_home = "/kb/module/lib/curated_blast/PaperBLAST"
+        
         os.mkdir('/kb/module/lib/curated_blast/PaperBLAST/tmp')
+        os.mkdir('/kb/module/lib/curated_blast/PaperBLAST/fbrowse_data')
         genome_dir_path = os.path.join("/kb/module/lib/curated_blast/PaperBLAST/tmp/ababffffbaba")
         os.mkdir(genome_dir_path)
-        pb_home = "/kb/module/lib/curated_blast/PaperBLAST"
-        logging.debug("CGI Dir: ")
+                logging.debug("CGI Dir: ")
         logging.debug(os.listdir(os.path.join(pb_home, "cgi")))
         logging.debug("Bin Dir: ")
         logging.debug(os.listdir(os.path.join(pb_home, "bin")))
-
+        
 
         #We copy the genome files to their location within PaperBLAST
         genome_p_location_pb = os.path.join(genome_dir_path,"faa")
@@ -173,14 +175,19 @@ class curated_blast:
 
 
         #DEBUGGING:
-        for l in new_file_list:
-            logging.debug(l)
-
         new_file_str = '\n'.join(new_file_list)
         
+        #CODE
         html_path = os.path.join(self.shared_folder,"cb_out.html")
         g = open(html_path,"w")
         g.write(new_file_str)
+        g.close()
+
+        #DEBUGGING
+        h = open(html_path, "r")
+        logging.debug(h.read())
+
+        #CODE
         os.chdir('/kb/module')
 
         html_dict = [{"path": html_path, "name":"Results"}]
