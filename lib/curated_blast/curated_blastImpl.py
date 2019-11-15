@@ -99,9 +99,9 @@ class curated_blast:
         logging.debug(os.listdir('/kb/module/lib'))
         logging.debug(os.listdir('/kb/module/lib/curated_blast'))
         logging.debug(os.listdir('/kb/module/lib/curated_blast/PaperBLAST'))
+        os.mkdir('/kb/module/lib/curated_blast/PaperBLAST/tmp')
         genome_dir_path = os.path.join("/kb/module/lib/curated_blast/PaperBLAST/tmp/ababffffbaba")
-        if not os.path.exists(genome_dir_path):
-            os.mkdir(genome_dir_path)
+        os.mkdir(genome_dir_path)
 
         #We copy the genome files to their location within PaperBLAST
         genome_p_location_pb = os.path.join(genome_dir_path,"faa")
