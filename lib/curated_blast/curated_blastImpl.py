@@ -102,6 +102,12 @@ class curated_blast:
         os.mkdir('/kb/module/lib/curated_blast/PaperBLAST/tmp')
         genome_dir_path = os.path.join("/kb/module/lib/curated_blast/PaperBLAST/tmp/ababffffbaba")
         os.mkdir(genome_dir_path)
+        pb_home = "/kb/module/lib/curated_blast/PaperBLAST"
+        logging.debug("CGI Dir: ")
+        logging.debug(os.listdir(os.path.join(pb_home, "cgi")))
+        logging.debug("Bin Dir: ")
+        logging.debug(os.listdir(os.path.join(pb_home, "bin")))
+
 
         #We copy the genome files to their location within PaperBLAST
         genome_p_location_pb = os.path.join(genome_dir_path,"faa")
@@ -132,11 +138,13 @@ class curated_blast:
         f = open("cb_out.html", "r")
         file_str = f.read()
 
+        logging.debug(len(file_str))
         #Updated base link:
         base_html = '<base href="http://papers.genomics.lbl.gov/cgi-bin/" target="_blank">'
         
         #finding and inserting the base link:
         file_list = file_str.split('\n')
+        logging.info("Number of lines in output file: " + str(len(file_list)))
         new_file_list = file_list[:8] + [base_html] + file_list[8:]
         bad_lines = []
         replace_line = 0
@@ -174,7 +182,7 @@ class curated_blast:
         report_info = report_client.create_extended_report({
 
         'direct_html_link_index': 0,
-        'message' : 'Here are the pathway completeness results',
+        'message' : 'The results from running Curated Blast',
         'workspace_name' : params['workspace_name'],
         'html_links' : html_dict
 
