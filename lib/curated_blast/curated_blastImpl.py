@@ -95,6 +95,10 @@ class curated_blast:
         gn_file_name = genome_nucleotide_filepath.split('/')[-1]
 
         #Making a directory for the genome fasta file
+        logging.debug(os.listdir('/kb/module'))
+        logging.debug(os.listdir('/kb/module/lib'))
+        logging.debug(os.listdir('/kb/module/lib/PaperBLAST'))
+        logging.debug(os.listdir('/kb/module/lib/PaperBLAST/tmp'))
         genome_dir_path = os.path.join('/kb/module',"lib/PaperBLAST/tmp/ababffffbaba")
         if not os.path.exists(genome_dir_path):
             os.mkdir(genome_dir_path)
@@ -105,7 +109,7 @@ class curated_blast:
         copyfile(genome_protein_filepath, genome_p_location_pb)
         copyfile(genome_nucleotide_filepath, genome_n_location_pb)
 
-        #We create symlinks for the reference data in the PaperBLAST data directory
+        #We copy the reference data in the PaperBLAST data directory
         data_dir = "/data"
         pb_data_dir = "/kb/module/lib/PaperBLAST/data"
         logging.debug(os.listdir(data_dir))
