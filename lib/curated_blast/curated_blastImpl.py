@@ -100,12 +100,11 @@ class curated_blast:
         logging.debug(os.listdir('/kb/module/lib/curated_blast'))
         logging.debug(os.listdir('/kb/module/lib/curated_blast/PaperBLAST'))
         pb_home = "/kb/module/lib/curated_blast/PaperBLAST"
-        
         os.mkdir('/kb/module/lib/curated_blast/PaperBLAST/tmp')
         os.mkdir('/kb/module/lib/curated_blast/PaperBLAST/fbrowse_data')
         genome_dir_path = os.path.join("/kb/module/lib/curated_blast/PaperBLAST/tmp/ababffffbaba")
         os.mkdir(genome_dir_path)
-                logging.debug("CGI Dir: ")
+        logging.debug("CGI Dir: ")
         logging.debug(os.listdir(os.path.join(pb_home, "cgi")))
         logging.debug("Bin Dir: ")
         logging.debug(os.listdir(os.path.join(pb_home, "bin")))
