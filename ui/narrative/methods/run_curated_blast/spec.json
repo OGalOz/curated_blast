@@ -29,6 +29,23 @@
                 "valid_ws_types": ["KBaseGenomes.Genome"]
 
             }
+        },
+        {
+            "id": "match_whole_words",
+            "optional": false,
+            "advanced": false,
+            "allow_multiple": false,
+            "default_values": [""],
+            "field_type": "dropdown",
+            "dropdown_options":{
+                "options": [{
+                    "value": "1",
+                    "display": "Match whole words only"
+                }, {
+                    "value": "0",
+                    "display": "Match partial words as well"
+            }]
+            }
         }
     ],
     "behavior": {
@@ -51,6 +68,10 @@
                 {
                     "input_parameter": "search_query",
                     "target_property": "search_query"
+                },
+                {
+                    "input_parameter": "match_whole_words",
+                    "target_property" : "match_whole_words"
                 }
             ],
             "output_mapping": [

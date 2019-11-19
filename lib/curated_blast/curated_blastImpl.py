@@ -71,6 +71,7 @@ class curated_blast:
 
         if 'search_query' in params:
             search_query = params['search_query']
+            logging.info("Search Query: " + search_query)
             if len(search_query) == 0:
                 raise Exception("length of search query is 0 - cannot perform search")
             #Perform other tests on search query

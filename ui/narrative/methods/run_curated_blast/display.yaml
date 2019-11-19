@@ -35,7 +35,12 @@ parameters :
         short-hint : |
             Examples - perchlorate or 1.2.1.88
         long-hint  : |
-            Any single word term or E.C. number that relates to a gene
+            Any single word term or E.C. number that relates to a gene.
+    match_whole_words :
+        ui-name : |
+            Match Whole Words?
+        short-hint: |
+            Match whole words in the search or partial words as well.
 
 description : |
     <p>Given a genome and a query, find characterized proteins whose descriptions match the query, and then search the genome for homologs of those proteins. - Uses Morgan Price's Curated Blast - http://papers.genomics.lbl.gov/cgi-bin/genomeSearch.cgi </p>
