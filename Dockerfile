@@ -106,6 +106,31 @@ RUN apt-get install -y wget
 
 #RUN pip3 install biopython
 
+RUN wget https://github.com/morgannprice/PaperBLAST/archive/master.zip
+
+RUN unzip master.zip
+
+RUN mv PaperBLAST-master PaperBLAST && rm master.zip
+
+RUN wget https://github.com/soedinglab/MMseqs2/archive/master.zip
+
+RUN unzip master.zip
+
+RUN mv MMseqs2-master PaperBLAST/mmseqs && rm master.zip
+
+RUN apt-get -y install cmake
+
+RUN cd PaperBLAST/mmseqs && mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=RELEASE -DCMAKE_INSTALL_PREFIX=. .. && make -j 4 && make install
+
+RUN mv PaperBLAST/mmseqs / && mv mmseqs/build PaperBLAST/mmseqs && mkdir PaperBLAST/bin/blast
+
+RUN wget ftp://ftp.ncbi.nlm.nih.gov/blast/executables/legacy.NOTSUPPORTED/2.2.18/blast-2.2.18-ia32-linux.tar.gz 
+
+RUN tar zxvf blast-2.2.18-ia32-linux.tar.gz
+
+RUN mv blast-2.2.18/bin/bl2seq PaperBLAST/bin/bl2seq && mv blast-2.2.18/bin/blastall PaperBLAST/bin/blast/blastall && mv blast-2.2.18/bin/fastacmd PaperBLAST/bin/blast/fastacmd && mv blast-2.2.18/bin/formatdb PaperBLAST/bin/blast/formatdb
+
+RUN ls
 
 # -----------------------------------------
 

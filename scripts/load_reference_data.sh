@@ -45,8 +45,8 @@ if [ $fail -eq 1 ] ; then
 fi
 echo "Done preparing reference data"
 
-safe_execute "ln -s uniq.* stats litsearch.db /kb/module/data/"
-ls /kb/module/data/ 
+safe_execute "ln -sf uniq.* stats litsearch.db /kb/module/data/"
+safe_execute "mv blast-2.2.18 /kb/module/data/" 
 
 if [ -e "/kb/module/data/uniq.faa" ] ; then
     echo "uniq.faa exists"

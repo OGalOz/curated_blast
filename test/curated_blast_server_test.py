@@ -73,9 +73,11 @@ class curated_blastTest(unittest.TestCase):
 
         genome_ref = '33506/4/1'
         search_query = 'manganese'
+        match_whole_words= '1'
         ret = self.serviceImpl.run_curated_blast(self.ctx, {'workspace_name': self.wsName,
                                                             'genome_ref':genome_ref,
-                                                             'search_query': search_query })
+                                                             'search_query': search_query,
+                                                             'match_whole_words': match_whole_words})
 
     '''    
     def test_again(self):
