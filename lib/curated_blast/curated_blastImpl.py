@@ -202,7 +202,7 @@ class curated_blast:
                 copyfile(os.path.join(data_dir, f),os.path.join(pb_data_dir,f))
 
 
-        #CODE - RUNNING CELLO --------------------------->>>>>>>>>>>>>>
+        #CODE - RUNNING CURATED BLAST --------------------------->>>>>>>>>>>>>>
         #We start the input string to the program
         search_input = 'gdb=local&gid=ababffffbaba&query=' + search_query + whole_words_query
 
@@ -212,7 +212,7 @@ class curated_blast:
         with open('cb_out.html', "w") as outfile:
             subprocess.call(cmnds, stdout=outfile)
 
-        #FINISHED RUNNING CELLO
+        #FINISHED RUNNING CURATED BLAST
     
 
         #DEBUG
