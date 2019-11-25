@@ -212,17 +212,24 @@ class curated_blast:
         with open('cb_out.html', "w") as outfile:
             subprocess.call(cmnds, stdout=outfile)
 
+        #DEBUG:
+        f = open(os.path.join(pb_home,"cgi/cb_out.html"),"r")
+        f_str = f.read()
+        f.close()
+        logging.debug(f_str)
+
         #FINISHED RUNNING CURATED BLAST
     
 
         #DEBUG
         #We take the mmseqs blast output and store it in our tempdir and return it to user
-        copyfile(os.path.join(pb_home,"tmp/mmseqs_search_output.txt"), os.path.join(self.shared_folder,"mmseqs_search_output.txt"))
-        copyfile("/fastx_protein_out.txt", os.path.join(self.shared_folder,"fastx_protein_out.txt"))
-        
         file_links = []
-        file_links.append({'path':os.path.join(self.shared_folder,"mmseqs_search_output.txt"), "name": "mmseqs_search_output"})
-        file_links.append({'path': os.path.join(self.shared_folder,"fastx_protein_out.txt"),"name": "fastx_out"})
+        if os.path.exists(os.path.join(pb_home,"tmp/mmseqs_search_output.txt")):
+            copyfile(os.path.join(pb_home,"tmp/mmseqs_search_output.txt"), os.path.join(self.shared_folder,"mmseqs_search_output.txt"))
+            file_links.append({'path':os.path.join(self.shared_folder,"mmseqs_search_output.txt"), "name": "mmseqs_search_output"})
+        if os.path.exists("/fastx_protein_out.txt"):
+            copyfile("/fastx_protein_out.txt", os.path.join(self.shared_folder,"fastx_protein_out.txt"))
+            file_links.append({'path': os.path.join(self.shared_folder,"fastx_protein_out.txt"),"name": "fastx_out"})
         
 
         #We take the file that the program outputted and move it back to the shared folder
