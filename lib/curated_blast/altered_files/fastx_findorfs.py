@@ -1,12 +1,15 @@
 #This file is a replacement for the usearch fastx_findorfs command.
+'''
+The command format (on usearch website):
+    usearch -fastx_findorfs reads.fastq -ntout -nt.fa -aaout aa.fa -orfstyle 7 -mincodons 16
+The command in Curated Blast: 
+    system("$usearch -fastx_findorfs $fnafile -aaout $xfile -orfstyle 7 -mincodons $minCodons >& /dev/null") == 0
 
-#The command format (on usearch website):
-# usearch -fastx_findorfs reads.fastq -ntout -nt.fa -aaout aa.fa -orfstyle 7 -mincodons 16
-# The command in Curated Blast: 
-# system("$usearch -fastx_findorfs $fnafile -aaout $xfile -orfstyle 7 -mincodons $minCodons >& /dev/null") == 0
-# File format (nt.fa): ">" + Sequence id + '|' "+/- 1/2/3" : "start - end" (total length) no spaces
-# The function main() is called at the end of the file.
-
+File format includes:
+    (nt.fa): ">" + Sequence id + '|' "+/- 1/2/3" : "start - end" (total length) no spaces
+    
+The function main() is called at the end of the file.
+'''
 
 from Bio import SeqIO
 from Bio.Seq import Seq
@@ -21,24 +24,24 @@ from shutil import copyfile
 # ORF can start right after a STOP codon.
 # ORF can end at the end of a nucleotide sequence, doesn't need a STOP codon.
 def main():
-    #logging.basicConfig(level=logging.DEBUG)
     args = sys.argv[1:]
-    #logging.debug(args)
     filename = args[1]
-    #logging.debug("input file name: " + filename)
     min_codons = int(args[7])
 
     #The name of the file to output to:
     protein_out = args[3]
 
-    #Sequences are given in Bio sequence format, with name and then sequence string inside a class.
+    #Sequences are parsed into Bio sequence format, with name and then sequence string inside a class.
     sequences = get_all_sequences_in_Bio_python_format(filename)
 
-    #Initialize a nucleotide file string (not in use)
+
+    #Initialize a protein out file string
+    protein_file_str = ''
+
+
+    #Initialize a nucleotide file string (not currently in use)
     nucleotide_file_str = ''
 
-    #Initialize a protein out file string (in use)
-    protein_file_str = ''
 
     for sequence in sequences:
 
@@ -78,11 +81,15 @@ def get_all_sequences_in_Bio_python_format(filename):
 
 #STOP CODONS ARE: TAG , TGA, and TAA
 # Reverse boolean is true if it is the reverse complement of the strand.
-def get_orfs_from_sequence(bio_sequence, sequence_name, reverse_bool, min_codons):
+def get_orfs_from_sequence(sequence_str, sequence_name, reverse_bool, min_codons):
 
     nucleotide_out_string = ''
     protein_out = ''
-    s = bio_sequence
+
+    #Renaming sequence_str to something shorter.
+    s = sequence_str
+
+
     tot_len = len(s)
     
     #Checking that there's enough nucleotides in the sequence to perform search 
@@ -92,36 +99,36 @@ def get_orfs_from_sequence(bio_sequence, sequence_name, reverse_bool, min_codons
         end_indices = [m.start() for m in re.finditer("TAG", s)] + [m.start() for m in re.finditer("TGA", s)] + [m.start() for m in re.finditer("TAA", s)]
 
         # These lists hold locations in terms of reading frames.
-        one = []
-        two = []
-        three = []
+        end_codon_indeces_frame_one = []
+        end_codon_indeces_frame_two = []
+        end_codon_indeces_frame_three = []
 
         #Finding the indices given the reading frame:
         for index in end_indices:
             if (index % 3) == 0:
-                one.append(index)
+                end_codon_indeces_frame_one.append(index)
             elif (index % 3) == 1:
-                two.append(index)
+                end_codon_indeces_frame_two.append(index)
             else:
-                three.append(index)
+                end_codon_indeces_frame_three.append(index)
         
         #Adding the last indeces to the open frames...
         last_index = tot_len - 1
         x = last_index % 3
-        one.append(last_index - x)
+        end_codon_indeces_frame_one.append(last_index - x)
         if x == 0:
-            two.append(last_index - 2)
-            three.append(last_index - 1)
+            end_codon_indeces_frame_two.append(last_index - 2)
+            end_codon_indeces_frame_three.append(last_index - 1)
         elif x == 1:
-            two.append(last_index)
-            three.append(last_index - 2)
+            end_codon_indeces_frame_two.append(last_index)
+            end_codon_indeces_frame_three.append(last_index - 2)
         elif x == 2:
-            three.append(last_index)
-            two.append(last_index - 1)
+            end_codon_indeces_frame_three.append(last_index)
+            end_codon_indeces_frame_two.append(last_index - 1)
 
-        one.sort()
-        two.sort()
-        three.sort()
+        end_codon_indeces_frame_one.sort()
+        end_codon_indeces_frame_two.sort()
+        end_codon_indeces_frame_three.sort()
 
 
         # If it's the reverse sequence then we give it -, if it's the original sequence give it +
@@ -133,30 +140,28 @@ def get_orfs_from_sequence(bio_sequence, sequence_name, reverse_bool, min_codons
         #The base Identifying information:
         base_sq_id = ">" + sequence_name + "|" + symbol
 
-        #If we are working with the file data directly, not the reverse complement
+        #If we are working with the forward DNA Sequence directly, not the reverse complement
         if reverse_bool == False:
-            #Getting data for "one"
-            one_sequences = []
+
+            #Old indx represents starting point for the frame. It's used to check if protein is long enough.
             old_indx = 0
-            
-            Out_Strings = add_all_valid_sequences(one, old_indx, one_sequences, s, base_sq_id, 1, min_codons, tot_len, reverse_bool)
+            #
+            Out_Strings = add_all_valid_sequences(end_codon_indeces_frame_one, old_indx, s, base_sq_id, 1, min_codons, tot_len, reverse_bool)
 
             nucleotide_out_string += Out_Strings[0]
             protein_out += Out_Strings[1]
 
-            two_sequences = []
             old_indx = 1
 
-            Out_Strings = add_all_valid_sequences(two, old_indx, two_sequences, s, base_sq_id, 2, min_codons, tot_len, reverse_bool)
+            Out_Strings = add_all_valid_sequences(end_codon_indeces_frame_two, old_indx, s, base_sq_id, 2, min_codons, tot_len, reverse_bool)
 
             nucleotide_out_string += Out_Strings[0] 
             protein_out += Out_Strings[1]
 
 
-            three_sequences = []
             old_indx = 2
 
-            Out_Strings = add_all_valid_sequences(three, old_indx, three_sequences, s, base_sq_id, 3, min_codons, tot_len, reverse_bool)
+            Out_Strings = add_all_valid_sequences(end_codon_indeces_frame_three, old_indx, s, base_sq_id, 3, min_codons, tot_len, reverse_bool)
 
             nucleotide_out_string += Out_Strings[0]
             protein_out += Out_Strings[1]
@@ -164,26 +169,23 @@ def get_orfs_from_sequence(bio_sequence, sequence_name, reverse_bool, min_codons
         #If we are working with the reverse complement
         else:
 
-            three_sequences = []
             old_indx = 2
 
-            Out_Strings = add_all_valid_sequences(three, old_indx, three_sequences, s, base_sq_id, 3, min_codons, tot_len, reverse_bool)
+            Out_Strings = add_all_valid_sequences(end_codon_indeces_frame_three, old_indx, s, base_sq_id, 3, min_codons, tot_len, reverse_bool)
           
             nucleotide_out_string += Out_Strings[0]
             protein_out += Out_Strings[1]
 
-            two_sequences = []
             old_indx = 1
 
-            Out_Strings = add_all_valid_sequences(two, old_indx, two_sequences, s, base_sq_id, 2, min_codons, tot_len, reverse_bool)
+            Out_Strings = add_all_valid_sequences(end_codon_indeces_frame_two, old_indx, s, base_sq_id, 2, min_codons, tot_len, reverse_bool)
             nucleotide_out_string += Out_Strings[0]
             protein_out += Out_Strings[1]
 
 
-            one_sequences = []
             old_indx = 0
 
-            Out_Strings = add_all_valid_sequences(one, old_indx, one_sequences, s, base_sq_id, 1, min_codons, tot_len, reverse_bool)
+            Out_Strings = add_all_valid_sequences(end_codon_indeces_frame_one, old_indx, s, base_sq_id, 1, min_codons, tot_len, reverse_bool)
             nucleotide_out_string += Out_Strings[0]
             protein_out += Out_Strings[1]
 
@@ -191,11 +193,12 @@ def get_orfs_from_sequence(bio_sequence, sequence_name, reverse_bool, min_codons
     return [nucleotide_out_string, protein_out]
     
 
-# This function returns a string formatted in the way usearch formats it.
-def add_all_valid_sequences(indx_list, old_indx, sequence_list, sequence, base_sq_id, frame_num, min_codons, tot_len, reverse_bool):
+# This function returns a string formatted in the way usearch fastx-findorfs formats it.
+def add_all_valid_sequences(indx_list, old_indx, sequence, base_sq_id, frame_num, min_codons, tot_len, reverse_bool):
     s = sequence
     nucleotide_out_string = ''
     protein_out_string = ''
+    sequence_list = []
 
     for indx in indx_list:
         #Here we make sure only the sequences who code for more than the min codons are passed
@@ -216,6 +219,7 @@ def add_all_valid_sequences(indx_list, old_indx, sequence_list, sequence, base_s
     return [nucleotide_out_string, protein_out_string]
 
 
+#This is an unused testing function which uses an old test file, Ros_9435.fasta.txt from Rosalind.
 def test():
     logging.basicConfig(level=logging.DEBUG)
     filename = "Ros_9435.fasta.txt"

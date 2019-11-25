@@ -83,6 +83,8 @@ def mmseqs_search(qry_filepath, trgt_filepath, out_filepath, e_value, log_info):
     
     if output != 0:
         logging.critical("mmseqs search failed at sensitivity 6")
+
+        #The following code could try mmseqs search at lower sensitivities:
         """
         output = os.system("mmseqs search queryDB targetDB resultDB tmp --alignment-mode 3 -s 5.0")
         if output != 0:
@@ -93,7 +95,6 @@ def mmseqs_search(qry_filepath, trgt_filepath, out_filepath, e_value, log_info):
                 #If it doesn't exist throw error
                 raise Exception("mmseqs search failed on alignment mode 3 with sensitivity 6 and 5.")
         """
-        #os.system("rm *DB*")
     output = os.system("mmseqs convertalis queryDB targetDB resultDB " + out_filepath)
     if output != 0:
         os.system("rm *DB*")
@@ -119,7 +120,7 @@ def remove_high_e_values_and_multiply_identity(filepath, e_value, out_file, log_
     #DEBUGGING
     log_info += file_str
 
-
+    #CODE
     file_list = file_str.split('\n')
     trgt_file_ids_dict = get_target_file_ids()
     new_file_list = []
