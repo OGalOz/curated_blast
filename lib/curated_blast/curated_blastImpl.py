@@ -8,7 +8,7 @@ from shutil import copyfile
 from installed_clients.KBaseReportClient import KBaseReport
 from installed_clients.GenomeFileUtilClient import GenomeFileUtil
 from installed_clients.WorkspaceClient import Workspace
-from cb_util.cb_functions import fix_html
+from cb_util.cb_functions import fix_html, genbank_to_faa
 from Bio import SeqIO
 
 #END_HEADER
@@ -97,10 +97,12 @@ class curated_blast:
                    
         #Is it necessary to get the workspace?
         ws = Workspace(self.ws_url, token=token)
-
+        
+        
         #CODE
         #Downloading the Genome information in protein sequence
         gf_tool = GenomeFileUtil(self.callback_url)
+
         genome_protein_meta = gf_tool.genome_proteins_to_fasta({'genome_ref': genome_ref})
 
         #DEBUG
@@ -109,17 +111,23 @@ class curated_blast:
 
         #CODE
         genome_protein_filepath = genome_protein_meta['file_path']
-
+        
+        
         #CODE 
         #Downloading the nucleotide sequence
-        genome_nucleotide_meta = gf_tool.genome_features_to_fasta({'genome_ref': genome_ref})
-
+        genome_nucleotide_meta = gf_tool.genome_to_genbank({'genome_ref': genome_ref})
+    
+        
         #DEBUG
         logging.debug("GENOME NUCLEOTIDE META")
         logging.debug(genome_nucleotide_meta)
 
         #CODE
-        genome_nucleotide_filepath = genome_nucleotide_meta['file_path']
+        genome_genbank_filepath = genome_nucleotide_meta['genbank_file']['file_path']
+        genome_fna_file_name = 'Genome_fna'
+        SeqIO.convert(genome_genbank_filepath, "genbank", os.path.join(self.shared_folder, genome_fna_file_name),"fasta")
+        genome_nucleotide_filepath = os.path.join(self.shared_folder, genome_fna_file_name)
+
 
         #HACK CODE
         gp_file_name = genome_protein_filepath.split('/')[-1]

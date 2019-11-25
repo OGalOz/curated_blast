@@ -1,5 +1,5 @@
 import logging
-
+from Bio import SeqIO
 
 
 
@@ -56,6 +56,21 @@ def fix_html(file_str):
         new_file_str = '\n'.join(new_file_list)
         return new_file_str        
 
+def genbank_to_faa(gbk_file_path, output_filepath):
+    input_handle = open(gbk_file_path,"r")
+    output_handle = open(output_filepath, "w")
+
+    for seq_record in SeqIO.parse(input_handle, "genbank"):
+        for seq_feature in seq_record.features:
+            if seq_feature.type=="CDS":
+                assert len(seq_feature.qualifiers['translation']) == 1
+                output_handle.write(">%s from %s\n%s\n" % (
+                    seq_feature.qualifiers['db_xref'][0],
+                    seq_record.name,
+                    seq_feature.qualifiers['translation'][0]))
+
+    output_handle.close()
+    input_handle.close()
 
 
 
