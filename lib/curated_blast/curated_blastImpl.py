@@ -51,7 +51,7 @@ class curated_blast:
 
     def run_curated_blast(self, ctx, params):
         """
-        This example function accepts any number of parameters and returns results in a KBaseReport
+        This function accepts any number of parameters and returns results in a KBaseReport
         :param params: instance of mapping from String to unspecified object
         :returns: instance of type "ReportResults" -> structure: parameter
            "report_name" of String, parameter "report_ref" of String
@@ -64,6 +64,8 @@ class curated_blast:
         
         token = os.environ.get('KB_AUTH_TOKEN', None)
 
+
+        #Exctracting params
         if "genome_ref" in params:
             genome_ref = params['genome_ref']
             logging.debug("Genome Ref: " + genome_ref)

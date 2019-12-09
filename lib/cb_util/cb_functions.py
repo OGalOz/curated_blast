@@ -5,7 +5,13 @@ from Bio import SeqIO
 
 #We take the file that the program outputted and move it back to the shared folder
 # with the following edits: Add new base link. Remove "Searching in" line.
+"""
+Inputs:
+    file_str: (str)
 
+Outputs:
+    new_file_str: (str)
+"""
 def fix_html(file_str):
 
         #CODE

@@ -4,7 +4,7 @@
 
 
 
-echo "DEBUG: RUNNING USEARCH REPLACEMENT"
+echo "RUNNING USEARCH REPLACEMENT"
 PATH=../mmseqs/bin/:$PATH
 uvar_blast="-ublast"
 uvar_fastx="-fastx_findorfs"

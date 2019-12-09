@@ -28,8 +28,6 @@ def mmseqs_search(qry_filepath, trgt_filepath, out_filepath, e_value, log_info):
     logging.debug("E value: " + e_value)
     '''
 
-    #reformat_fasta_file(qry_filepath)
-    #reformat_fasta_file(trgt_filepath)
     
     #Clear out all the previous temporary directories:
     #This clears out PaperBLAST/cgi/tmp
