@@ -9,6 +9,7 @@ from installed_clients.KBaseReportClient import KBaseReport
 from installed_clients.GenomeFileUtilClient import GenomeFileUtil
 from installed_clients.WorkspaceClient import Workspace
 from cb_util.cb_functions import fix_html, genbank_to_faa
+from cb_util.usearch_test import usearch_fast_x
 from Bio import SeqIO
 
 #END_HEADER
@@ -65,7 +66,11 @@ class curated_blast:
         token = os.environ.get('KB_AUTH_TOKEN', None)
 
 
-        #Exctracting params
+        #Testing old version:
+        #usearch_fast_x('/kb/module/data/Genome_fna',os.path.join(self.shared_folder,"early_test"), '/kb/module/lib/curated_blast/old_usearch', '30')
+
+
+        #Extracting params
         if "genome_ref" in params:
             genome_ref = params['genome_ref']
             logging.debug("Genome Ref: " + genome_ref)
@@ -104,7 +109,6 @@ class curated_blast:
         #CODE
         #Downloading the Genome information in protein sequence
         gf_tool = GenomeFileUtil(self.callback_url)
-
         genome_protein_meta = gf_tool.genome_proteins_to_fasta({'genome_ref': genome_ref})
 
         #DEBUG
@@ -118,8 +122,7 @@ class curated_blast:
         #CODE 
         #Downloading the nucleotide sequence
         genome_nucleotide_meta = gf_tool.genome_to_genbank({'genome_ref': genome_ref})
-    
-        
+
         #DEBUG
         logging.debug("GENOME NUCLEOTIDE META")
         logging.debug(genome_nucleotide_meta)
@@ -231,6 +234,13 @@ class curated_blast:
         #FINISHED RUNNING CURATED BLAST
     
 
+
+        #TESTING OLD USEARCH:
+        test_fastx_out = os.path.join(self.shared_folder, "fastx_test_out")
+        usearch_path = '/kb/module/lib/curated_blast/old_usearch'
+        mincodons = "30"
+        usearch_response = usearch_fast_x(genome_nucleotide_filepath,test_fastx_out,usearch_path, mincodons)
+
         #DEBUG
         #We take the mmseqs blast output and store it in our tempdir and return it to user
         file_links = []
@@ -240,6 +250,16 @@ class curated_blast:
         if os.path.exists("/fastx_protein_out.txt"):
             copyfile("/fastx_protein_out.txt", os.path.join(self.shared_folder,"fastx_protein_out.txt"))
             file_links.append({'path': os.path.join(self.shared_folder,"fastx_protein_out.txt"),"name": "fastx_out"})
+        if os.path.exists(os.path.join(pb_home, "tmp/usearch_mmseqs_out")):
+            copyfile(os.path.join(pb_home, "tmp/usearch_mmseqs_out"), os.path.join(self.shared_folder,"ublast_log"))
+            logging.debug("Copied UBlast log")
+        else:
+            raise Exception("Did not get ublast log.")
+        if os.path.exists(os.path.join(pb_home,"tmp/fastx_replace_out")):
+            copyfile(os.path.join(pb_home,"tmp/fastx_replace_out"),os.path.join(self.shared_folder,"fastx_log") )
+            logging.debug("Copied fastx log.")
+        else:
+            raise Exception("Did not get fastx findorfs log.")
         
 
         #We take the file that the program outputted and move it back to the shared folder

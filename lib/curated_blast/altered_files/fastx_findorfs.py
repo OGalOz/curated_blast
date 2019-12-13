@@ -28,6 +28,9 @@ def main():
     filename = args[1]
     min_codons = int(args[7])
 
+    print("Fastx findorfs Arguments: ")
+    print(args)
+
     #The name of the file to output to:
     protein_out = args[3]
 
@@ -240,7 +243,7 @@ def test():
         nucleotide_file_str += file_strings[0]
         protein_file_str += file_strings[1]
 
-    logging.debug(protein_file_str)
+    #logging.debug(protein_file_str)
 
 
 main()

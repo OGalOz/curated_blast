@@ -10,12 +10,13 @@ uvar_blast="-ublast"
 uvar_fastx="-fastx_findorfs"
 if [ "$1" == "$uvar_blast" ]; 
 then
-    echo "GOING TO RUN PYTHON"
+    echo "RUNNING UBLAST REPLACEMENT WITH MMSEQS"
     python3 ../bin/main.py -ublast $2 $4 $8 $6
 
 elif [ "$1" == "$uvar_fastx" ];
 then
-    python3 ../bin/fastx_findorfs.py $1 $2 $3 $4 $5 $6 $7 $8 $9 $10
+    echo "RUNNING FASTX FINDORFS REPLACEMENT WITH PYTHON FILE"
+    python3 ../bin/fastx_findorfs.py $1 $2 $3 $4 $5 $6 $7 $8 $9 ${10}
 
 else
     echo "Not found"
