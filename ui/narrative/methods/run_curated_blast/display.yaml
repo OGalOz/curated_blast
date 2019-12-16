@@ -44,9 +44,15 @@ parameters :
 
 description : |
     <p>Given a genome and a query, find characterized proteins whose descriptions match the query, and then search the genome for homologs of those proteins. You can use any Genome object. - This is the KBase wrapper for <a href="http://papers.genomics.lbl.gov/cgi-bin/genomeSearch.cgi/">Curated BLAST</a> -  </p>
+    <p>For example, queries could be "perchlorate", "manganate". Genomes could be any Genome object, eg "Shewanella_amazonensis_SB2B".</p>
+    <p></p>
+    <p>Uses <a href="https://github.com/soedinglab/MMseqs2">MMseqs2</a> to run BLAST searches.</p>
+    <p> <a href="https://github.com/morgannprice/PaperBLAST">Link</a> to Curated Blast on Github </p>
 
 publications :
     -
         display-text: |
-            Morgan N. Price, Adam P. Arkin: Curated BLAST for Genomes. mSystems. DOI 10.1128/mSystems.00072-19
+            Price MN, Arkin AP: Curated BLAST for Genomes. mSystems. 2019. DOI 10.1128/mSystems.00072-19
                 link: https://msystems.asm.org/content/4/2/e00072-19
+            Steinegger M and Soeding J. MMseqs2 enables sensitive protein sequence searching for the analysis of massive data sets. Nature Biotechnology, 2017 doi: 10.1038/nbt.3988 
+                link: https://www.nature.com/nbt/journal/vaop/ncurrent/full/nbt.3988.html
