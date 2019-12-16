@@ -62,6 +62,13 @@ def fix_html(file_str):
         new_file_str = '\n'.join(new_file_list)
         return new_file_str        
 
+"""
+Inputs: 
+    gbk_file_path: (str) Path to Genbank file provided by Genome File Util.
+    output_filepath: (str) Path to output file (Fasta Amino Acid)    
+Output:
+    None
+"""
 def genbank_to_faa(gbk_file_path, output_filepath):
     input_handle = open(gbk_file_path,"r")
     output_handle = open(output_filepath, "w")
@@ -78,8 +85,7 @@ def genbank_to_faa(gbk_file_path, output_filepath):
     output_handle.close()
     input_handle.close()
 
-
-
+    return None
 
 
 

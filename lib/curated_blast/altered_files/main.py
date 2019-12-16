@@ -9,7 +9,15 @@ from Bio import SeqIO
 
 # ublast command: $usearch -ublast $chitsfaaFile -db $seqFile -evalue $maxEvalue -blast6out $ublastFile >& /dev/null"
 # Make every temporary file exist in the same temporary directory
+"""
+Inputs:
+    qry_filepath: (str) Filepath to query file
+    trgt_filepath: (str) Filepath to target file
+    out_filepath: (str) Filepath to the output, may not yet exist.
+    e_value: (str) str of float
+    log_info: (str) String that contains all of logging info not outputted.
 
+"""
 def ublast_replace(qry_filepath, trgt_filepath, out_filepath, e_value, log_info):
  
     mmseqs_search(qry_filepath, trgt_filepath, out_filepath, e_value, log_info)
@@ -17,8 +25,10 @@ def ublast_replace(qry_filepath, trgt_filepath, out_filepath, e_value, log_info)
     f = open("../tmp/log_info_main", "w")
     f.write(log_info)
 
+    return 0
 
-# You need to check the file format and convert it to one that's appropriate for mmseqs, i.e 1 line per id, then 1 line per sequence.
+
+# We check the file format and convert it to one that's appropriate for mmseqs, i.e 1 line per id, then 1 line per sequence.
 def mmseqs_search(qry_filepath, trgt_filepath, out_filepath, e_value, log_info):
 
     '''
@@ -55,8 +65,6 @@ def mmseqs_search(qry_filepath, trgt_filepath, out_filepath, e_value, log_info):
 
     logging.info("Cleared out two directories: " + folder_1 + " " + folder_3) 
 
-    """
-    """
 
     #RUNNING MMSEQS:
     output = os.system("mmseqs createdb " + qry_filepath + " queryDB")
@@ -228,7 +236,8 @@ def main():
             logging.info("running mmseqs search")
             qry_filepath, trgt_filepath, out_filepath, e_value = arguments[1], arguments[2], arguments[3], arguments[4]
             ublast_replace(qry_filepath, trgt_filepath, out_filepath, e_value, log_info)
-
+    else:
+        raise Exception("Did not catch all arguments to main.py")
         
     
 main()

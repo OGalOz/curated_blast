@@ -25,6 +25,8 @@ from shutil import copyfile
 # ORF can end at the end of a nucleotide sequence, doesn't need a STOP codon.
 def main():
     args = sys.argv[1:]
+    if len(args) < 8:
+        raise Exception("Not enough arguments passed to fastx_findorfs file.")
     filename = args[1]
     min_codons = int(args[7])
 
@@ -71,7 +73,7 @@ def main():
 
 
 
-
+# filename: (str)
 def get_all_sequences_in_Bio_python_format(filename):
     sequence_list = []
     for sequence in SeqIO.parse(filename, 'fasta'):
@@ -84,6 +86,12 @@ def get_all_sequences_in_Bio_python_format(filename):
 
 #STOP CODONS ARE: TAG , TGA, and TAA
 # Reverse boolean is true if it is the reverse complement of the strand.
+"""
+min_codons: (int)
+reverse_bool: (bool)
+sequence_name: (str)
+sequence_str: (str)
+"""
 def get_orfs_from_sequence(sequence_str, sequence_name, reverse_bool, min_codons):
 
     nucleotide_out_string = ''
@@ -197,6 +205,21 @@ def get_orfs_from_sequence(sequence_str, sequence_name, reverse_bool, min_codons
     
 
 # This function returns a string formatted in the way usearch fastx-findorfs formats it.
+"""
+Inputs:
+    indx_list: (list)
+    old_indx: (int)
+    sequence: (str)
+    base_sq_id: (str)
+    frame_num: (int)
+    min_codons: (int)
+    tot_len: (int)
+    reverse_bool: (bool)
+Outputs:
+    return_list: (list) List of length 2
+        nucleotide_out_string: (str) Our fastx nucleotide string
+        protein_out_string: (str) Our fastx amino acid string.
+"""
 def add_all_valid_sequences(indx_list, old_indx, sequence, base_sq_id, frame_num, min_codons, tot_len, reverse_bool):
     s = sequence
     nucleotide_out_string = ''
@@ -218,9 +241,9 @@ def add_all_valid_sequences(indx_list, old_indx, sequence, base_sq_id, frame_num
             protein = Seq(seq[1]).translate()
             protein_out_string += str(Seq(seq[1]).translate()) + "\n"
 
+    return_list = [nucleotide_out_string, protein_out_string]
 
-    return [nucleotide_out_string, protein_out_string]
-
+    return return_list 
 
 #This is an unused testing function which uses an old test file, Ros_9435.fasta.txt from Rosalind.
 def test():

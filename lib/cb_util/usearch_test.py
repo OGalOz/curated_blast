@@ -3,6 +3,7 @@
 '''
 Retesting old usearch functions
 
+Not currently in use.
 
 
 '''

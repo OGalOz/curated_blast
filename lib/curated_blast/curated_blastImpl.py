@@ -9,7 +9,7 @@ from installed_clients.KBaseReportClient import KBaseReport
 from installed_clients.GenomeFileUtilClient import GenomeFileUtil
 from installed_clients.WorkspaceClient import Workspace
 from cb_util.cb_functions import fix_html, genbank_to_faa
-from cb_util.usearch_test import usearch_fast_x
+#from cb_util.usearch_test import usearch_fast_x
 from Bio import SeqIO
 
 #END_HEADER
@@ -98,7 +98,6 @@ class curated_blast:
             raise Exception("params does not include match_whole_words option.")
 
                    
-        #Is it necessary to get the workspace?
         ws = Workspace(self.ws_url, token=token)
         
         
@@ -155,7 +154,7 @@ class curated_blast:
         logging.debug("Altered files Dir: ")
         new_files = os.listdir(alt_file_dir)
         logging.debug(new_files)
-        copyfile(os.path.join(alt_file_dir, 'dbg_genomeSearch.cgi' ),os.path.join(pb_home,"cgi/dbg_genomeSearch.cgi"))
+        copyfile(os.path.join(alt_file_dir, 'dbg_genomeSearch.cgi' ), os.path.join(pb_home,"cgi/dbg_genomeSearch.cgi"))
         os.chmod(os.path.join(pb_home,"cgi/dbg_genomeSearch.cgi"), 0o111)
         
         #Removing current FetchAssembly (from github) and replacing with newer version
@@ -167,7 +166,7 @@ class curated_blast:
         copyfile(os.path.join(alt_file_dir,"clear_dir.py" ),os.path.join(pb_bin,"clear_dir.py"))
         os.chmod(os.path.join(pb_bin,"clear_dir.py"), 0o111)
 
-        copyfile(os.path.join(alt_file_dir,"fastx_findorfs.py" ),os.path.join(pb_bin,"fastx_findorfs.py"))
+        copyfile(os.path.join(alt_file_dir,"fastx_findorfs.py"),os.path.join(pb_bin,"fastx_findorfs.py"))
         os.chmod(os.path.join(pb_bin,"fastx_findorfs.py"), 0o111)
 
         copyfile(os.path.join(alt_file_dir,"main.py"),os.path.join(pb_bin,"main.py"))
