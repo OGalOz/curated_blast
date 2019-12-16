@@ -66,10 +66,6 @@ class curated_blast:
         token = os.environ.get('KB_AUTH_TOKEN', None)
 
 
-        #Testing old version:
-        #usearch_fast_x('/kb/module/data/Genome_fna',os.path.join(self.shared_folder,"early_test"), '/kb/module/lib/curated_blast/old_usearch', '30')
-
-
         #Extracting params
         if "genome_ref" in params:
             genome_ref = params['genome_ref']
@@ -82,7 +78,7 @@ class curated_blast:
             search_query = params['search_query']
             logging.info("Search Query: " + search_query)
             if len(search_query) == 0:
-                raise Exception("length of search query is 0 - cannot perform search")
+                raise Exception("length of search query is 0 - cannot perform search as it does not exist")
             #Perform other tests on search query
             if ' ' in search_query:
                 logging.critical("search query contains a space")

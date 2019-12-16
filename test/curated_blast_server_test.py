@@ -78,13 +78,13 @@ class curated_blastTest(unittest.TestCase):
                                                             'genome_ref':genome_ref,
                                                              'search_query': search_query,
                                                              'match_whole_words': match_whole_words})
-
-    '''    
-    def test_again(self):
-
-        genome_ref = '33506/5/1'
-        search_query = 'glyceraldehyde'
+    def test_not_whole_words(self):
+        genome_ref = '33506/5/1' #Shewanella_amazonensis_SB2B
+        search_query = "glucosamine"
+        match_whole_words = '0'
         ret = self.serviceImpl.run_curated_blast(self.ctx, {'workspace_name': self.wsName,
                                                             'genome_ref':genome_ref,
-                                                             'search_query': search_query })
-    '''
+                                                             'search_query': search_query,
+                                                             'match_whole_words': match_whole_words})
+
+

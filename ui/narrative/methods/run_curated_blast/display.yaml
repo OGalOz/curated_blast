@@ -4,7 +4,7 @@
 name: Curated Blast (M Price)
 
 tooltip: |
-   Run Morgan Price's program Curated Blast on a Genome in KBase
+   Run Morgan Price's program, "Curated Blast", on a Genome in KBase.
 
 screenshots: []
 
@@ -43,6 +43,10 @@ parameters :
             Match whole words in the search or partial words as well.
 
 description : |
-    <p>Given a genome and a query, find characterized proteins whose descriptions match the query, and then search the genome for homologs of those proteins. - Uses Morgan Price's Curated Blast - http://papers.genomics.lbl.gov/cgi-bin/genomeSearch.cgi </p>
+    <p>Given a genome and a query, find characterized proteins whose descriptions match the query, and then search the genome for homologs of those proteins. You can use any Genome object. - Original Program Link - http://papers.genomics.lbl.gov/cgi-bin/genomeSearch.cgi </p>
 
-
+publications :
+    -
+        display-text: |
+            Morgan N. Price, Adam P. Arkin: Curated BLAST for Genomes DOI 10.1128/mSystems.00072-19
+                link: https://msystems.asm.org/content/4/2/e00072-19
