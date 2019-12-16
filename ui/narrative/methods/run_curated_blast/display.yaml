@@ -43,10 +43,10 @@ parameters :
             Match whole words in the search or partial words as well.
 
 description : |
-    <p>Given a genome and a query, find characterized proteins whose descriptions match the query, and then search the genome for homologs of those proteins. You can use any Genome object. - Original Program Link - http://papers.genomics.lbl.gov/cgi-bin/genomeSearch.cgi </p>
+    <p>Given a genome and a query, find characterized proteins whose descriptions match the query, and then search the genome for homologs of those proteins. You can use any Genome object. - This is the KBase wrapper for <a href="http://papers.genomics.lbl.gov/cgi-bin/genomeSearch.cgi/">Curated BLAST</a> -  </p>
 
 publications :
     -
         display-text: |
-            Morgan N. Price, Adam P. Arkin: Curated BLAST for Genomes DOI 10.1128/mSystems.00072-19
+            Morgan N. Price, Adam P. Arkin: Curated BLAST for Genomes. mSystems. DOI 10.1128/mSystems.00072-19
                 link: https://msystems.asm.org/content/4/2/e00072-19
