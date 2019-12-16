@@ -1,10 +1,10 @@
 {
-    "ver": "0.0.1",
+    "ver": "0.0.3",
     "authors": [
         "omreegaloz"
     ],
-    "contact": "",
-    "categories": ["active"],
+    "contact": "http://kbase.us/contact-us",
+    "categories": ["active", "sequence"],
     "widgets": {
         "input": null,
         "output": null
