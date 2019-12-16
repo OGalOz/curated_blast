@@ -230,13 +230,6 @@ class curated_blast:
         #FINISHED RUNNING CURATED BLAST
     
 
-
-        #TESTING OLD USEARCH:
-        test_fastx_out = os.path.join(self.shared_folder, "fastx_test_out")
-        usearch_path = '/kb/module/lib/curated_blast/old_usearch'
-        mincodons = "30"
-        usearch_response = usearch_fast_x(genome_nucleotide_filepath,test_fastx_out,usearch_path, mincodons)
-
         #DEBUG
         #We take the mmseqs blast output and store it in our tempdir and return it to user
         file_links = []
