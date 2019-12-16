@@ -4,6 +4,7 @@ import logging
 import os
 import subprocess
 import stat
+import time
 from shutil import copyfile
 from installed_clients.KBaseReportClient import KBaseReport
 from installed_clients.GenomeFileUtilClient import GenomeFileUtil
@@ -117,6 +118,10 @@ class curated_blast:
         #CODE 
         #Downloading the nucleotide sequence
         genome_nucleotide_meta = gf_tool.genome_to_genbank({'genome_ref': genome_ref})
+        
+        #Timing:
+        start_time = time.time()
+
 
         #DEBUG
         logging.debug("GENOME NUCLEOTIDE META")
@@ -265,6 +270,11 @@ class curated_blast:
         g.write(new_file_str)
         g.close()
 
+
+        #Timing:
+        end_time = time.time()
+        logging.debug("Time: ")
+        logging.debug(end_time - start_time)
 
         #CODE
         #preparing file for output
