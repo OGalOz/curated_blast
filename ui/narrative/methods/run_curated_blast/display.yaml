@@ -4,7 +4,7 @@
 name: Curated Blast (M Price)
 
 tooltip: |
-   Run Morgan Price's program, "Curated Blast", on a Genome in KBase.
+   Run a Blast which gives you information based on several databases and checks for displaced possible genes.  
 
 screenshots: []
 
