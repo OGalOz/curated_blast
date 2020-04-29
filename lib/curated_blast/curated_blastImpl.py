@@ -10,7 +10,9 @@ from installed_clients.KBaseReportClient import KBaseReport
 from installed_clients.GenomeFileUtilClient import GenomeFileUtil
 from installed_clients.WorkspaceClient import Workspace
 from cb_util.cb_functions import fix_html, genbank_to_faa
-#from cb_util.usearch_test import usearch_fast_x
+from cb_util.validate import validate_params
+from cb_util.downloader import download_genome
+from cb_util.setup_dirs import set_up_CB, set_up_return
 from Bio import SeqIO
 
 #END_HEADER
@@ -61,235 +63,95 @@ class curated_blast:
         # ctx is the context object
         # return variables are: output
         #BEGIN run_curated_blast
-        report_client = KBaseReport(self.callback_url)
-        
-        
-        token = os.environ.get('KB_AUTH_TOKEN', None)
 
 
-        #Extracting params
-        if "genome_ref" in params:
-            genome_ref = params['genome_ref']
-            logging.debug("Genome Ref: " + genome_ref)
-        else:
-            logging.info('the genome reference number is not in the params.')
-            raise Exception("no genome ref to download")
-
-        if 'search_query' in params:
-            search_query = params['search_query']
-            logging.info("Search Query: " + search_query)
-            if len(search_query) == 0:
-                raise Exception("length of search query is 0 - cannot perform search as it does not exist")
-            #Perform other tests on search query
-            if ' ' in search_query:
-                logging.critical("search query contains a space")
-        else:
-            raise Exception("search query not passed into params")
-
-        if "match_whole_words" in params:
-            mww = params["match_whole_words"]
-            logging.info("Match Whole Words: " + mww)
-            if mww == "1":
-                whole_words_query = "&word=on"
-            elif mww == "0":
-                whole_words_query = ""
-            else:
-                raise Exception("Cannot recognize match_whole_words value")
-        else:
-            raise Exception("params does not include match_whole_words option.")
-
-                   
-        ws = Workspace(self.ws_url, token=token)
-        
-        
-        #CODE
-        #Downloading the Genome information in protein sequence
-        gf_tool = GenomeFileUtil(self.callback_url)
-        genome_protein_meta = gf_tool.genome_proteins_to_fasta({'genome_ref': genome_ref})
-
-        #DEBUG
-        logging.debug("GENOME PROTEIN META")
-        logging.debug(genome_protein_meta)
-
-        #CODE
-        genome_protein_filepath = genome_protein_meta['file_path']
-        
-        
-        #CODE 
-        #Downloading the nucleotide sequence
-        genome_nucleotide_meta = gf_tool.genome_to_genbank({'genome_ref': genome_ref})
-        
-        #Timing:
+        # Timing:
         start_time = time.time()
 
+        # Creating useful classes
+        report_client = KBaseReport(self.callback_url)
+        token = os.environ.get('KB_AUTH_TOKEN', None)
+        ws = Workspace(self.ws_url, token=token)
+        gf_tool = GenomeFileUtil(self.callback_url)
 
-        #DEBUG
-        logging.debug("GENOME NUCLEOTIDE META")
-        logging.debug(genome_nucleotide_meta)
+        #Extracting params
+        whole_words_query = validate_params(params)
+        genome_ref = params['genome_ref']
+        search_query = params['search_query']
+        
+        
+        # We get genome_protein_file and genome_fna_file
+        genome_protein_filepath, genome_nucleotide_filepath = download_genome(
+                genome_ref, gf_tool, self.shared_folder)
 
-        #CODE
-        genome_genbank_filepath = genome_nucleotide_meta['genbank_file']['file_path']
-        genome_fna_file_name = 'Genome_fna'
-        SeqIO.convert(genome_genbank_filepath, "genbank", os.path.join(self.shared_folder, genome_fna_file_name),"fasta")
-        genome_nucleotide_filepath = os.path.join(self.shared_folder, genome_fna_file_name)
-
-
-        #HACK CODE
-        gp_file_name = genome_protein_filepath.split('/')[-1]
-        gn_file_name = genome_nucleotide_filepath.split('/')[-1]
-
-        #CODE - creating directories for curated blast
+        # Creating directories for curated blast
         pb_home = "/PaperBLAST"
-        if not os.path.exists(os.path.join(pb_home, "tmp")):
-            os.mkdir(os.path.join(pb_home, "tmp"))
-        if not os.path.exists(os.path.join(pb_home,"fbrowse_data")):
-            os.mkdir(os.path.join(pb_home, "fbrowse_data"))
-        if not os.path.exists(os.path.join(pb_home, "data")):
-            os.mkdir(os.path.join(pb_home,"data"))
-        if not os.path.exists(os.path.join(pb_home,"private")):
-            os.mkdir(os.path.join(pb_home, "private"))
-        if not os.path.exists(os.path.join(pb_home, "tmp/ababffffbaba")):
-            os.mkdir(os.path.join(pb_home, "tmp/ababffffbaba"))
-        genome_dir_path = os.path.join(pb_home, "tmp/ababffffbaba")
+        # genome_dir must be regex match to ^[0-9A-Fa-f]+$
+        genome_dir = "d1"
+        set_up_inp_dict = {"pb_home": pb_home,
+                "genome_protein_filepath": genome_protein_filepath,
+                "genome_nucleotide_filepath": genome_nucleotide_filepath,
+                "genome_dir": "tmp/" + genome_dir}
+        set_up_CB(set_up_inp_dict)
 
 
-        #CODE
-        #Copying Altered PaperBLAST files to appropriate directories within PaperBLAST
-        alt_file_dir = os.path.join('/kb/module','lib/curated_blast/altered_files')
-        logging.debug("Altered files Dir: ")
-        new_files = os.listdir(alt_file_dir)
-        logging.debug(new_files)
-        copyfile(os.path.join(alt_file_dir, 'dbg_genomeSearch.cgi' ), os.path.join(pb_home,"cgi/dbg_genomeSearch.cgi"))
-        os.chmod(os.path.join(pb_home,"cgi/dbg_genomeSearch.cgi"), 0o111)
-        
-        #Removing current FetchAssembly (from github) and replacing with newer version
-        os.unlink(os.path.join(pb_home, "lib/FetchAssembly.pm"))
-        copyfile(os.path.join(alt_file_dir, 'FetchAssembly.pm'), os.path.join(pb_home, "lib/FetchAssembly.pm"))
-        os.chmod(os.path.join(pb_home, "lib/FetchAssembly.pm"), 0o111)
-
-        pb_bin = os.path.join(pb_home, "bin")
-        copyfile(os.path.join(alt_file_dir,"clear_dir.py" ),os.path.join(pb_bin,"clear_dir.py"))
-        os.chmod(os.path.join(pb_bin,"clear_dir.py"), 0o111)
-
-        copyfile(os.path.join(alt_file_dir,"fastx_findorfs.py"),os.path.join(pb_bin,"fastx_findorfs.py"))
-        os.chmod(os.path.join(pb_bin,"fastx_findorfs.py"), 0o111)
-
-        copyfile(os.path.join(alt_file_dir,"main.py"),os.path.join(pb_bin,"main.py"))
-        os.chmod(os.path.join(pb_bin,"main.py"), 0o111)
-
-        copyfile(os.path.join(alt_file_dir, "usearch" ),os.path.join(pb_bin,"usearch"))
-        os.chmod(os.path.join(pb_bin,"usearch"), 0o111)
-
-        if not os.path.exists(os.path.join(pb_bin,"blast")):
-            logging.info("bin/blast dir does not exist in PaperBLAST")
-            os.mkdir(os.path.join(pb_bin,"blast"))
-        else:
-            logging.info("bin/blast path exists in PaperBLAST")
-
-        
-        #The first one should just be in pb_bin, not in the blast dir
-        os.chmod(os.path.join(pb_bin,"bl2seq"), 0o111)
-        os.chmod(os.path.join(pb_bin, "blast/fastacmd"), 0o111)
-        os.chmod(os.path.join(pb_bin,"blast/blastall"), 0o111)
-        os.chmod(os.path.join(pb_bin,"blast/formatdb"), 0o111)
-
-
-        #CODE
-        #We copy the genome files to their location within PaperBLAST
-        genome_p_location_pb = os.path.join(genome_dir_path,"faa")
-        genome_n_location_pb = os.path.join(genome_dir_path, "fna")
-        copyfile(genome_protein_filepath, genome_p_location_pb)
-        copyfile(genome_nucleotide_filepath, genome_n_location_pb)
-
-        #CODE
-        #We copy the reference data in the PaperBLAST data directory
-        data_dir = "/data"
-        pb_data_dir = os.path.join(pb_home, "data")
-
-
-        #CODE
-        #copying data from data directory to PaperBLAST data directory
-        #This is slow?
-        for f in os.listdir(data_dir):
-            if os.path.isfile(os.path.join(data_dir,f)):
-                copyfile(os.path.join(data_dir, f),os.path.join(pb_data_dir,f))
-
-
-        #CODE - RUNNING CURATED BLAST --------------------------->>>>>>>>>>>>>>
-        #We start the input string to the program
-        search_input = 'gdb=local&gid=ababffffbaba&query=' + search_query + whole_words_query
+        # RUNNING CURATED BLAST --------------------------->>>>>>>>>>>>>>
+        # We initialize the input string to the program
+        search_input = 'gdb=local&gid=' + genome_dir + '&query=' + \
+                search_query + whole_words_query
 
         #We run the program internally from within PaperBLAST's cgi directory
-        os.chdir(os.path.join(pb_home,"cgi"))
+        HTML_OUT = "cb_out.html"
         cmnds = ['perl','dbg_genomeSearch.cgi', search_input]
-        with open('cb_out.html', "w") as outfile:
+        os.chdir(os.path.join(pb_home,"cgi"))
+        with open(HTML_OUT, "w") as outfile:
             subprocess.call(cmnds, stdout=outfile)
-
-        #DEBUG:
-        f = open(os.path.join(pb_home,"cgi/cb_out.html"),"r")
-        f_str = f.read()
-        f.close()
-        logging.debug(f_str)
-
         #FINISHED RUNNING CURATED BLAST
-    
+        logging.info("Finished Running Curated BLAST, " \
+                        + "now we set up return files.")
 
-        #DEBUG
-        #We take the mmseqs blast output and store it in our tempdir and return it to user
-        file_links = []
-        if os.path.exists(os.path.join(pb_home,"tmp/mmseqs_search_output.txt")):
-            copyfile(os.path.join(pb_home,"tmp/mmseqs_search_output.txt"), os.path.join(self.shared_folder,"mmseqs_search_output.txt"))
-            file_links.append({'path':os.path.join(self.shared_folder,"mmseqs_search_output.txt"), "name": "mmseqs_search_output"})
-        if os.path.exists("/fastx_protein_out.txt"):
-            copyfile("/fastx_protein_out.txt", os.path.join(self.shared_folder,"fastx_protein_out.txt"))
-            file_links.append({'path': os.path.join(self.shared_folder,"fastx_protein_out.txt"),"name": "fastx_out"})
-        if os.path.exists(os.path.join(pb_home, "tmp/usearch_mmseqs_out")):
-            copyfile(os.path.join(pb_home, "tmp/usearch_mmseqs_out"), os.path.join(self.shared_folder,"ublast_log"))
-            logging.debug("Copied UBlast log")
-        else:
-            raise Exception("Did not get ublast log.")
-        if os.path.exists(os.path.join(pb_home,"tmp/fastx_replace_out")):
-            copyfile(os.path.join(pb_home,"tmp/fastx_replace_out"),os.path.join(self.shared_folder,"fastx_log") )
-            logging.debug("Copied fastx log.")
-        else:
-            raise Exception("Did not get fastx findorfs log.")
-        
+        # We take the mmseqs blast output files and store them in our tempdir 
+        # which allows us to return it to the user using KB report client 
+        file_links = set_up_return(pb_home, self.shared_folder)
 
-        #We take the file that the program outputted and move it back to the shared folder
-        # with the following edits: Add new base link. Remove "Searching in" line.
-        f = open("cb_out.html", "r")
-        html_file_str = f.read()
-        f.close()
-
+        # We take the HTML file outputted and move it back to the shared folder
+        # with the following edits: Add new base link. Remove "Searching in" 
+        # line.
+        with open(HTML_OUT, "r") as f:
+            html_file_str = f.read()
         new_file_str = fix_html(html_file_str)
         
         #writing output file to a place where KBase SDK can get to it
         os.chdir('/kb/module')
-        html_path = os.path.join(self.shared_folder,"cb_out.html")
-        g = open(html_path,"w")
-        g.write(new_file_str)
-        g.close()
+        html_path = os.path.join(self.shared_folder, HTML_OUT)
+        with open(html_path, "w") as g:
+            g.write(new_file_str)
 
 
         #Timing:
         end_time = time.time()
-        logging.debug("Time: ")
-        logging.debug(end_time - start_time)
+        logging.debug("Time Taken to Run program: ")
+        logging.debug(str(end_time - start_time) + " seconds")
 
         #CODE
         #preparing file for output
-        html_dict = [{"path": html_path, "name":"Results", "label": "curated-blast-results"}]
+        html_dict_list = [
+                {
+            "path": html_path, 
+            "name":"Results", 
+            "label": "curated-blast-results"
+            }
+            ]
 
-        report_info = report_client.create_extended_report({
-
-        'file_links' : file_links,
-        'direct_html_link_index': 0,
-        'message' : 'The results from running Curated Blast',
-        'workspace_name' : params['workspace_name'],
-        'html_links' : html_dict,
-
-        })
-
+        report_info = report_client.create_extended_report(
+            {
+                'file_links' : file_links,
+                'direct_html_link_index': 0,
+                'message' : 'The results from running Curated Blast',
+                'workspace_name' : params['workspace_name'],
+                'html_links' : html_dict_list
+            }
+        )
 
         output = {
             'report_name': report_info['name'],

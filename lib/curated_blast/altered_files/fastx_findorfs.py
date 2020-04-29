@@ -62,11 +62,11 @@ def main():
         nucleotide_file_str += file_strings[0]
         protein_file_str += file_strings[1]
     
-    g = open(protein_out, "w")
-    g.write(protein_file_str)
+    with open(protein_out, "w") as g:
+        g.write(protein_file_str)
 
     #DEBUGGING
-    copyfile(protein_out, "/fastx_protein_out.txt")
+    copyfile(protein_out, "/PaperBLAST/tmp/fastx_protein_out.txt")
 
 
     return 0
@@ -87,17 +87,17 @@ def get_all_sequences_in_Bio_python_format(filename):
 #STOP CODONS ARE: TAG , TGA, and TAA
 # Reverse boolean is true if it is the reverse complement of the strand.
 """
-min_codons: (int)
-reverse_bool: (bool)
-sequence_name: (str)
 sequence_str: (str)
+sequence_name: (str)
+reverse_bool: (bool)
+min_codons: (int)
 """
 def get_orfs_from_sequence(sequence_str, sequence_name, reverse_bool, min_codons):
 
     nucleotide_out_string = ''
     protein_out = ''
 
-    #Renaming sequence_str to something shorter.
+    #Renaming sequence_str to something shorter for ease of use in program
     s = sequence_str
 
 
@@ -107,7 +107,9 @@ def get_orfs_from_sequence(sequence_str, sequence_name, reverse_bool, min_codons
     if tot_len > (min_codons * 3):
 
         #Find the locations of all the stop codons:
-        end_indices = [m.start() for m in re.finditer("TAG", s)] + [m.start() for m in re.finditer("TGA", s)] + [m.start() for m in re.finditer("TAA", s)]
+        end_indices = [m.start() for m in re.finditer("TAG", s)] \
+                + [m.start() for m in re.finditer("TGA", s)] \
+                + [m.start() for m in re.finditer("TAA", s)]
 
         # These lists hold locations in terms of reading frames.
         end_codon_indeces_frame_one = []
@@ -157,14 +159,16 @@ def get_orfs_from_sequence(sequence_str, sequence_name, reverse_bool, min_codons
             #Old indx represents starting point for the frame. It's used to check if protein is long enough.
             old_indx = 0
             #
-            Out_Strings = add_all_valid_sequences(end_codon_indeces_frame_one, old_indx, s, base_sq_id, 1, min_codons, tot_len, reverse_bool)
+            Out_Strings = add_all_valid_sequences(end_codon_indeces_frame_one, 
+                    old_indx, s, base_sq_id, 1, min_codons, tot_len, reverse_bool)
 
             nucleotide_out_string += Out_Strings[0]
             protein_out += Out_Strings[1]
 
             old_indx = 1
 
-            Out_Strings = add_all_valid_sequences(end_codon_indeces_frame_two, old_indx, s, base_sq_id, 2, min_codons, tot_len, reverse_bool)
+            Out_Strings = add_all_valid_sequences(end_codon_indeces_frame_two, 
+                    old_indx, s, base_sq_id, 2, min_codons, tot_len, reverse_bool)
 
             nucleotide_out_string += Out_Strings[0] 
             protein_out += Out_Strings[1]
@@ -172,7 +176,8 @@ def get_orfs_from_sequence(sequence_str, sequence_name, reverse_bool, min_codons
 
             old_indx = 2
 
-            Out_Strings = add_all_valid_sequences(end_codon_indeces_frame_three, old_indx, s, base_sq_id, 3, min_codons, tot_len, reverse_bool)
+            Out_Strings = add_all_valid_sequences(end_codon_indeces_frame_three,
+                    old_indx, s, base_sq_id, 3, min_codons, tot_len, reverse_bool)
 
             nucleotide_out_string += Out_Strings[0]
             protein_out += Out_Strings[1]
@@ -182,21 +187,24 @@ def get_orfs_from_sequence(sequence_str, sequence_name, reverse_bool, min_codons
 
             old_indx = 2
 
-            Out_Strings = add_all_valid_sequences(end_codon_indeces_frame_three, old_indx, s, base_sq_id, 3, min_codons, tot_len, reverse_bool)
+            Out_Strings = add_all_valid_sequences(end_codon_indeces_frame_three,
+                    old_indx, s, base_sq_id, 3, min_codons, tot_len, reverse_bool)
           
             nucleotide_out_string += Out_Strings[0]
             protein_out += Out_Strings[1]
 
             old_indx = 1
 
-            Out_Strings = add_all_valid_sequences(end_codon_indeces_frame_two, old_indx, s, base_sq_id, 2, min_codons, tot_len, reverse_bool)
+            Out_Strings = add_all_valid_sequences(end_codon_indeces_frame_two, 
+                    old_indx, s, base_sq_id, 2, min_codons, tot_len, reverse_bool)
             nucleotide_out_string += Out_Strings[0]
             protein_out += Out_Strings[1]
 
 
             old_indx = 0
 
-            Out_Strings = add_all_valid_sequences(end_codon_indeces_frame_one, old_indx, s, base_sq_id, 1, min_codons, tot_len, reverse_bool)
+            Out_Strings = add_all_valid_sequences(end_codon_indeces_frame_one, 
+                    old_indx, s, base_sq_id, 1, min_codons, tot_len, reverse_bool)
             nucleotide_out_string += Out_Strings[0]
             protein_out += Out_Strings[1]
 

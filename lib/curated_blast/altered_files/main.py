@@ -21,9 +21,10 @@ Inputs:
 def ublast_replace(qry_filepath, trgt_filepath, out_filepath, e_value, log_info):
  
     mmseqs_search(qry_filepath, trgt_filepath, out_filepath, e_value, log_info)
-    log_info = remove_high_e_values_and_multiply_identity(out_filepath, e_value, out_filepath, log_info)
-    f = open("../tmp/log_info_main", "w")
-    f.write(log_info)
+    log_info = remove_high_e_values_and_multiply_identity(out_filepath, e_value,
+                                                        out_filepath, log_info)
+    with open("../tmp/log_info_main", "w") as f:
+        f.write(log_info)
 
     return 0
 
@@ -31,18 +32,11 @@ def ublast_replace(qry_filepath, trgt_filepath, out_filepath, e_value, log_info)
 # We check the file format and convert it to one that's appropriate for mmseqs, i.e 1 line per id, then 1 line per sequence.
 def mmseqs_search(qry_filepath, trgt_filepath, out_filepath, e_value, log_info):
 
-    '''
-    logging.debug("QRY FP: " + qry_filepath)
-    logging.debug("TRGT FP: " + trgt_filepath)
-    logging.debug("OUT FP: " + out_filepath)
-    logging.debug("E value: " + e_value)
-    '''
-
-    
     #Clear out all the previous temporary directories:
     #This clears out PaperBLAST/cgi/tmp
+    # We are currently in PaperBLAST/cgi
     folder_1 = os.path.join(os.getcwd(),"tmp")
-    #logging.debug("f1 : " + folder_1)
+
     if os.path.exists(folder_1):
         clear_directory(folder_1)
     else:
@@ -52,8 +46,9 @@ def mmseqs_search(qry_filepath, trgt_filepath, out_filepath, e_value, log_info):
     folder_2 = os.path.join('/'.join(os.getcwd().split('/')[:-1]), "tmp")
     if not os.path.exists(folder_2):
         os.mkdir(folder_2)
-    #clear_directory(folder_2)
-    #logging.debug("f2 : " + folder_2)
+    else:
+        # This will never occur in the Docker image
+        clear_directory(folder_2)
 
     #Here we clear out PaperBLAST/tmp/mmseqstmp
     folder_3 = os.path.join(folder_2, "mmseqstmp")
@@ -69,62 +64,64 @@ def mmseqs_search(qry_filepath, trgt_filepath, out_filepath, e_value, log_info):
     #RUNNING MMSEQS:
     output = os.system("mmseqs createdb " + qry_filepath + " queryDB")
     if output != 0:
-        #reformat_fasta_file(qry_filepath)
-        #output = os.system("mmseqs createdb " + qry_filepath + " queryDB")
-        #if output != 0:
         os.system("rm *DB*")
-        raise Exception("Failed to create queryDB from query file; there might be something wrong with the query file format. The command mmseqs createdb failed")
+        raise Exception("Failed to create queryDB from query file; there might "
+                        "be something wrong with the query file format. "
+                            "The command mmseqs createdb failed")
+
     output = os.system("mmseqs createdb " + trgt_filepath + " targetDB")
     if output != 0:
-        #reformat_fasta_file(trgt_filepath)
-        #output = os.system("mmseqs createdb " + trgt_filepath + " targetDB")
-        #if output != 0:
         os.system("rm *DB*")
-        raise Exception("Failed to create targetDB from target file; there might be something wrong with the target file format. The command mmseqs createdb failed.")
+        raise Exception("Failed to create targetDB from target file; "
+                            "there might be something wrong with the target "
+                            "file format. The command mmseqs createdb failed.")
+
     output = os.system("mmseqs createindex targetDB tmp")
     if output != 0:
         os.system("rm *DB*")
         raise Exception("Failed to index targetDB. The command mmseqs createindex failed.")
-    output = os.system("mmseqs search queryDB targetDB resultDB tmp --alignment-mode 3 -s 6.0")
-    
-    if output != 0:
-        logging.critical("mmseqs search failed at sensitivity 6")
 
-        #The following code could try mmseqs search at lower sensitivities:
-        """
-        output = os.system("mmseqs search queryDB targetDB resultDB tmp --alignment-mode 3 -s 5.0")
-        if output != 0:
-            logging.critical("mmseqs search failed on sensitivity 5 and 6, skipping to sensitivity 3")
-            output = os.system("mmseqs search queryDB targetDB resultDB tmp --alignment-mode 3 -s 3.0")
-            if output != 0:
-                #look for output file (resultDB)
-                #If it doesn't exist throw error
-                raise Exception("mmseqs search failed on alignment mode 3 with sensitivity 6 and 5.")
-        """
+    run_mmseqs_at_varying_sensitivities()
+
     output = os.system("mmseqs convertalis queryDB targetDB resultDB " + out_filepath)
     if output != 0:
         os.system("rm *DB*")
         raise Exception("mmseqs convertalis failed.")
-    #FOR DEBUGGING:
-    g = open(out_filepath, "r")
-    file_str = g.read()
-    g.close()
-    d = open("../tmp/mmseqs_search_output.txt", "w")
-    d.write(file_str)
-    d.close()
 
+    #FOR DEBUGGING:
+    shutil.copyfile(out_filepath, "../tmp/mmseqs_search_output.txt")
     os.system("mv queryDB* targetDB* resultDB* ../tmp/mmseqstmp/")
     logging.info("Moved all temporary files to mmseqstmp dir")
+
+    return 0
+
+
+def run_mmseqs_at_varying_sensitivities():
+    for s in ['6.0','5.0','4.0','3.0','2.0','1.0']:
+        # this is the mmseqs command that is most likely to fail.
+        # we try it in different sensitivities.
+        cmd = "mmseqs search queryDB targetDB resultDB tmp --alignment-mode 3 "
+        cmd += "-s " + s
+        logging.info("Running MMSEQS search at sensitivitiy " + s)
+        output = os.system(cmd)
+        if output == 0:
+            break
+        else:
+            logging.critical("mmseqs search failed at sensitivity " + s)
+            if s == '1.0':
+                logging.warning("mmseqs search failed at all sensitivities")
+
+
 
 
 #Here we remove all e values that are higher than the threshold
 def remove_high_e_values_and_multiply_identity(filepath, e_value, out_file, log_info):
-    f = open(filepath, "r")
-    file_str = f.read()
+    with open(filepath, "r") as f:
+        file_str = f.read()
 
 
     #DEBUGGING
-    log_info += file_str
+    log_info += 'File:-------------\n' + file_str + 'EOF---------\n'
 
     #CODE
     file_list = file_str.split('\n')
@@ -146,14 +143,16 @@ def remove_high_e_values_and_multiply_identity(filepath, e_value, out_file, log_
                    logging.critical('could not find corresponding id in target file for id: ' + line_list[1])
                new_file_list.append(line_list)
         else:
-            logging.critical("The following line was parsed from the file")
-            logging.critical(line_list)
+            logging.critical("The following line had a surprising number of "
+                            "tsvs.")
+            logging.critical(blast_line)
 
-    log_info += write_list_d2_to_file(new_file_list, out_file, log_info)
+    log_info = write_list_d2_to_file(new_file_list, out_file, log_info)
     #For debugging purposes:
-    log_info += write_list_d2_to_file(new_file_list, '../tmp/testing_ublast', log_info)
+    log_info = write_list_d2_to_file(new_file_list, '../tmp/testing_ublast', log_info)
     return log_info
 
+# List d2 just means a list with dimension 2- as in list within a list.
 def write_list_d2_to_file(d2_list, filename, log_info):
     new_file_str_list = ['\t'.join(line_list) for line_list in d2_list]
     log_info += '\n NEW FILE STRING LIST \n' + str(new_file_str_list)
@@ -179,16 +178,17 @@ def clear_directory(folder):
 
 def get_target_file_ids():
     crnt_dir = os.getcwd()
-    f = open(os.path.join(crnt_dir,"../tmp/trgt_copy"), "r")
-    file_str = f.read()
+    with open(os.path.join(crnt_dir,"../tmp/trgt_copy"), "r") as f:
+        file_str = f.read()
     line_list = file_str.split('\n')
     ids_list = []
-    #We take only the ids (lines that start with '>')
+    # We take only the ids (lines that start with '>')
     for i in range(len(line_list)):
         if i%2 == 0:
             ids_list.append(line_list[i])
 
-    #We maintain a dictionary of all the ids in the target file such that: {'part of id before first white space': 'entire id', again etc.}
+    # We maintain a dictionary of all the ids in the target file such that: 
+    # {'part of id before first white space': 'entire id', again etc.}
     ids_dict = dict()
     for i in range(len(ids_list)):
 
