@@ -31,9 +31,9 @@ class curated_blast:
     # state. A method could easily clobber the state set by another while
     # the latter method is running.
     ######################################### noqa
-    VERSION = "0.0.2"
-    GIT_URL = "https://github.com/OGalOz/curated_blast.git"
-    GIT_COMMIT_HASH = "cb732727addb493974f3bdbaf83bf6e8526e5d51"
+    VERSION = "0.0.3"
+    GIT_URL = "https://github.com/n1mus/curated_blast"
+    GIT_COMMIT_HASH = "956b612e0dedfeca6649076229450815d6660cf7"
 
     #BEGIN_CLASS_HEADER
     #END_CLASS_HEADER
@@ -53,7 +53,7 @@ class curated_blast:
 
     def run_curated_blast(self, ctx, params):
         """
-        This function accepts any number of parameters and returns results in a KBaseReport
+        This example function accepts any number of parameters and returns results in a KBaseReport
         :param params: instance of mapping from String to unspecified object
         :returns: instance of type "ReportResults" -> structure: parameter
            "report_name" of String, parameter "report_ref" of String

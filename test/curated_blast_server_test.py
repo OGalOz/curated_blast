@@ -69,7 +69,7 @@ class curated_blastTest(unittest.TestCase):
                                                              'parameter_1': 'Hello World!',
                                                              'search_query': search_query })
     '''
-    def test_genome_download(self):
+    def _test_genome_download(self):
 
         genome_ref = '33506/4/1'
         search_query = 'manganese'
@@ -80,11 +80,40 @@ class curated_blastTest(unittest.TestCase):
                                                              'match_whole_words': match_whole_words})
     def test_not_whole_words(self):
         genome_ref = '33506/5/1' #Shewanella_amazonensis_SB2B
+        genome_ref = '60798/5/1' # prod, Shewanella_amazonensis_SB2B
         search_query = "glucosamine"
         match_whole_words = '0'
         ret = self.serviceImpl.run_curated_blast(self.ctx, {'workspace_name': self.wsName,
                                                             'genome_ref':genome_ref,
                                                              'search_query': search_query,
                                                              'match_whole_words': match_whole_words})
+
+
+    def _test_search_term_returned_too_many_hits(self):
+        genome_ref = '60798/2/1' # prod, Carsonella rukki PV RAST
+        search_query = 'DNA'
+        match_whole_words = '1'
+        ret = self.serviceImpl.run_curated_blast(self.ctx, {
+            'workspace_name': self.wsName,
+            'genome_ref': genome_ref,
+            'search_query': search_query,
+            'match_whole_words': match_whole_words})
+
+
+
+
+    def _test_no_curated_entries(self):
+        genome_ref = '60798/2/1' # prod, Carsonella rukki PV RAST
+        search_query = 'F0F1'
+        match_whole_words = '0'
+        ret = self.serviceImpl.run_curated_blast(self.ctx, {
+            'workspace_name': self.wsName,
+            'genome_ref': genome_ref,
+            'search_query': search_query,
+            'match_whole_words': match_whole_words})
+
+
+
+
 
 
