@@ -1,3 +1,6 @@
 test_local
 sdk.cfg
 lib/curated_blast/old_usearch
+.*.sw[a-z]
+*.py.bak*
+data
