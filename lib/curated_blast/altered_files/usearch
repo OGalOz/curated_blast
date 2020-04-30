@@ -21,11 +21,3 @@ then
 else
     echo "Not found"
 fi
-
-#for arg in "$@"
-#do
-#    echo $arg
-#done
-
-
-
