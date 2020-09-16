@@ -1,5 +1,6 @@
 import logging
 from Bio import SeqIO
+import re
 
 
 
@@ -32,7 +33,16 @@ def fix_html(file_str):
         bad_lines = []
 
         #finding a line to replace
-        replace_line = -1
+        replace_ublast_line = -1
+        replace_another_query_line = -1 # for when no or too many PaperBLAST article hits
+
+        #regexes to match to hyperlinked "another query" lines
+        r1 = (
+            """None of the curated entries in PaperBLAST's database match '.*'\. """
+            """Please try <a href=".*">another query</a>""")
+        r2 = (
+            """Sorry, too many curated entries match the query '.*'\. """
+            """Please try <a href=".*">another query</a>""")
 
         #Finding and removing searching in line
         for i in range(len(new_file_list)):
@@ -43,13 +53,21 @@ def fix_html(file_str):
             elif 'relevant proteins in Proteome with' in new_file_list[i]:
                 bad_lines.append(i)
             elif 'Running ublast against the 6-frame translation.' in new_file_list[i]:
-                replace_line = i
+                replace_ublast_line = i
+            elif re.search(r1, new_file_list[i]) or re.search(r2, new_file_list[i]):
+                replace_another_query_line = i
 
         #Replacing last ublast line:
-        if replace_line != -1:
-            new_file_list[replace_line] = new_file_list[replace_line].replace('ublast','mmseqs2')
+        if replace_ublast_line != -1:
+            new_file_list[replace_ublast_line] = new_file_list[replace_ublast_line].replace('ublast','mmseqs2')
         else:
             logging.critical("Could not find ublast line")
+        #Replacing 'another query' line
+        if replace_another_query_line != -1:
+            new_file_list[replace_another_query_line] = re.sub(
+                '<a href=".*">another query</a>', 
+                'another query', 
+                new_file_list[replace_another_query_line])
         #Going through the indeces in reverse and removing the lines
         bad_lines.sort()
         for j in range(len(bad_lines)):

@@ -6,6 +6,7 @@ import subprocess
 import stat
 import time
 from shutil import copyfile
+import uuid
 from installed_clients.KBaseReportClient import KBaseReport
 from installed_clients.GenomeFileUtilClient import GenomeFileUtil
 from installed_clients.WorkspaceClient import Workspace
@@ -47,7 +48,7 @@ class curated_blast:
         self.callback_url = os.environ['SDK_CALLBACK_URL']
         self.shared_folder = config['scratch']
         logging.basicConfig(format='%(created)s %(levelname)s: %(message)s',
-                            level=logging.DEBUG)
+                            level=logging.INFO)
         self.ws_url = config['workspace-url']
         #END_CONSTRUCTOR
         pass
@@ -100,8 +101,12 @@ class curated_blast:
         search_input = 'gdb=local&gid=' + genome_dir + '&query=' + \
                 search_query + whole_words_query
 
+        # Create directory for this run to distinguish outfiles for debugging purposes
+        run_dir = os.path.join(self.shared_folder, str(uuid.uuid4())) 
+        os.mkdir(run_dir)
+        HTML_OUT = os.path.join(run_dir, "cb_out.html")
+
         #We run the program internally from within PaperBLAST's cgi directory
-        HTML_OUT = "cb_out.html"
         cmnds = ['perl','dbg_genomeSearch.cgi', search_input]
         os.chdir(os.path.join(pb_home,"cgi"))
         with open(HTML_OUT, "w") as outfile:
@@ -122,8 +127,7 @@ class curated_blast:
         new_file_str = fix_html(html_file_str)
         
         #writing output file to a place where KBase SDK can get to it
-        os.chdir('/kb/module')
-        html_path = os.path.join(self.shared_folder, HTML_OUT)
+        html_path = os.path.join(run_dir, 'cb_out_mod.html') 
         with open(html_path, "w") as g:
             g.write(new_file_str)
 
@@ -137,11 +141,14 @@ class curated_blast:
         #preparing file for output
         html_dict_list = [
                 {
-            "path": html_path, 
-            "name":"Results", 
+            "path": html_path, # report html
+            "name":"results.html", # kbr will rename the file to this  
             "label": "curated-blast-results"
             }
             ]
+
+        logging.info('html_dict_list')
+        logging.info(html_dict_list)
 
         report_info = report_client.create_extended_report(
             {
