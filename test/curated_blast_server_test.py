@@ -78,7 +78,7 @@ class curated_blastTest(unittest.TestCase):
                                                             'genome_ref':genome_ref,
                                                              'search_query': search_query,
                                                              'match_whole_words': match_whole_words})
-    def test_not_whole_words(self):
+    def _test_not_whole_words(self):
         genome_ref = '33506/5/1' #Shewanella_amazonensis_SB2B
         genome_ref = '60798/5/1' # prod, Shewanella_amazonensis_SB2B
         search_query = "glucosamine"
@@ -91,7 +91,7 @@ class curated_blastTest(unittest.TestCase):
 
     # error case
     # may want to inspect report, i.e., `firefox test_local/workdir/tmp/*/*.html &`
-    def test_query_term_returned_too_many_curated_articles(self):
+    def _test_query_term_returned_too_many_curated_articles(self):
         genome_ref = '60798/2/1' # prod, Carsonella rukki PV RAST
         search_query = 'DNA'
         match_whole_words = '1'
@@ -104,7 +104,7 @@ class curated_blastTest(unittest.TestCase):
 
     # error case
     # may want to inspect report
-    def test_curated_sequences_returned_no_hits_in_query_genome(self):
+    def _test_curated_sequences_returned_no_hits_in_query_genome(self):
         genome_ref = '60798/2/1' # prod, Carsonella rukki PV RAST
         search_query = 'dnaA'
         match_whole_words = '1'
@@ -119,7 +119,7 @@ class curated_blastTest(unittest.TestCase):
     
     # error case
     # may want to inspect report
-    def test_query_term_returned_no_curated_articles(self):
+    def _test_query_term_returned_no_curated_articles(self):
         genome_ref = '60798/2/1' # prod, Carsonella rukki PV RAST
         search_query = 'F0F1'
         match_whole_words = '0'
